@@ -16,7 +16,6 @@ import com.haixia.service.IUserService;
 @RequestMapping("/user")
 public class UserController {
 
-	
 	@Resource
 	private IUserService userService;
 	
