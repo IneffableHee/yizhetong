@@ -7,11 +7,9 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
-import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.codec.Base64;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.session.mgt.eis.SessionDAO;
-import org.apache.shiro.subject.support.DefaultSubjectContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,13 +20,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.alibaba.fastjson.JSONObject;
 import com.haixia.pojo.User;
 import com.haixia.service.IUserService;
-import com.haixia.util.JsonUtil;
-import com.haixia.util.UserUtil;
 
 @Controller
 @RequestMapping("/home")
 public class HomePageController {
-	private static final String Set = null;
 
 	private static Logger logger = Logger.getLogger(UserController.class);
 	
@@ -52,8 +47,6 @@ public class HomePageController {
 		}
 		
 		Set<String> menus = this.userService.getHomeMenu(user);
-		JsonUtil JsonT = new JsonUtil();
-		
 		
 		json.put("userName",user.getUserName());
 		json.put("currentUserId",user.getId());
