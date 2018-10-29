@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>登陆</title>
+<script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+</head>
+<body>
+用户名：<input type="text" name="name"><br>
+密  码：<input type="text" name="pw"><br>
+<p id="msg"></p>
+<input type="button" id="b1" value="登陆测试"><br>
+<input type="button" id="b2" value="Shiro登陆"><br>
+</body>
+<script>
+    $(function () {
+        $("#b1").click(function () {
+            $.ajax({
+                url: "http://localhost:8888/icdata/user/loginTest",        //��̨url
+                data: {                          //����
+                    name:$("input[name='name']").val(),
+                    pw:$("input[name='pw']").val()
+                },
+                type: "POST",                   //���ͣ�POST����GET
+                dataType: 'json',              //���ݷ������ͣ�������xml��json��
+                success: function (data) {      //�ɹ����ص�����
+                    alert(JSON.stringify(data));
+                },
+                error: function (er) {          //ʧ�ܣ��ص�����
+                    alert(JSON.stringify(er));
+                }
+            });
+        })
+		
+		$("#b2").click(function () {
+            $.ajax({
+                url: "http://localhost:8888/icdata/user/login",        //��̨url
+                data: {                          //����
+                    username:$("input[name='name']").val(),
+                    password:$("input[name='pw']").val()
+                },
+                type: "POST",                   //���ͣ�POST����GET
+                dataType: 'json',              //���ݷ������ͣ�������xml��json��
+                success: function (data) {      
+					dare=JSON.parse(data);
+					if(dare.status==1){
+						window.location.href="file:///G:/eclipse-workspace/icdata/src/main/webapp/index.jsp"
+					}else{
+						alert(dare.msg);
+					}
+                },
+                error: function (er) {          //ʧ�ܣ��ص�����
+                    alert(JSON.stringify(er));
+                }
+            });
+        })
+
+    })
+</script>
+</html>

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.haixia.mapper.DepartmentMapper">
+  <resultMap id="BaseResultMap" type="com.haixia.pojo.Department">
+    <id column="department_id" jdbcType="INTEGER" property="departmentId" />
+    <result column="department_name" jdbcType="VARCHAR" property="departmentName" />
+    <result column="department_description" jdbcType="VARCHAR" property="departmentDescription" />
+    <result column="parent_department_id" jdbcType="INTEGER" property="parentDepartmentId" />
+    <result column="create_time" jdbcType="VARCHAR" property="createTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    department_id, department_name, department_description, parent_department_id, create_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from ic_department
+    where department_id = #{departmentId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from ic_department
+    where department_id = #{departmentId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.haixia.pojo.Department">
+    insert into ic_department (department_id, department_name, department_description, 
+      parent_department_id, create_time)
+    values (#{departmentId,jdbcType=INTEGER}, #{departmentName,jdbcType=VARCHAR}, #{departmentDescription,jdbcType=VARCHAR}, 
+      #{parentDepartmentId,jdbcType=INTEGER}, #{createTime,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.haixia.pojo.Department">
+    insert into ic_department
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="departmentId != null">
+        department_id,
+      </if>
+      <if test="departmentName != null">
+        department_name,
+      </if>
+      <if test="departmentDescription != null">
+        department_description,
+      </if>
+      <if test="parentDepartmentId != null">
+        parent_department_id,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="departmentId != null">
+        #{departmentId,jdbcType=INTEGER},
+      </if>
+      <if test="departmentName != null">
+        #{departmentName,jdbcType=VARCHAR},
+      </if>
+      <if test="departmentDescription != null">
+        #{departmentDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="parentDepartmentId != null">
+        #{parentDepartmentId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.haixia.pojo.Department">
+    update ic_department
+    <set>
+      <if test="departmentName != null">
+        department_name = #{departmentName,jdbcType=VARCHAR},
+      </if>
+      <if test="departmentDescription != null">
+        department_description = #{departmentDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="parentDepartmentId != null">
+        parent_department_id = #{parentDepartmentId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where department_id = #{departmentId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.haixia.pojo.Department">
+    update ic_department
+    set department_name = #{departmentName,jdbcType=VARCHAR},
+      department_description = #{departmentDescription,jdbcType=VARCHAR},
+      parent_department_id = #{parentDepartmentId,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=VARCHAR}
+    where department_id = #{departmentId,jdbcType=INTEGER}
+  </update>
+</mapper>

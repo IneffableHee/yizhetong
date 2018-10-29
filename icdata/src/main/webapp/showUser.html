@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>ShowUser</title>
+<script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+</head>
+<body>
+<input type="text" name="name"><br>
+<input type="text" name="pw"><br>
+<input type="button" id="b1" value="提交"><br>
+</body>
+<script>
+    $(function () {
+        $("#b1").click(function () {
+            $.ajax({
+                url: "http://localhost:8888/icdata/user/login",        //��̨url
+                data: {                          
+                    name:$("input[name='name']").val(),
+                    pw:$("input[name='pw']").val()
+                },
+                type: "POST",                   
+                dataType: 'json',              
+                success: function (data) {      
+                    alert(JSON.stringify(data));
+                },
+                error: function (er) {          
+                    alert(JSON.stringify(er));
+                }
+            });
+        })
+
+    })
+</script>
+</html>

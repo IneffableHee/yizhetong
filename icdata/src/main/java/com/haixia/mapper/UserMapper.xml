@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.haixia.mapper.IUserMapper">
+  <resultMap id="BaseResultMap" type="com.haixia.pojo.User">
+    <id column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="user_pass" jdbcType="VARCHAR" property="userPass" />
+    <result column="user_phone" jdbcType="VARCHAR" property="userPhone" />
+    <result column="is_admin" jdbcType="INTEGER" property="isAdmin" />
+    <result column="register_time" jdbcType="VARCHAR" property="registerTime" />
+    <result column="last_login_time" jdbcType="VARCHAR" property="lastLoginTime" />
+    <result column="last_login_ip" jdbcType="VARCHAR" property="lastLoginIp" />
+    <result column="department_id" jdbcType="INTEGER" property="departmentId" />
+    <!-- 进行 多表关联插叙，先关联user和role -->  
+	  <collection property="roleSet" column="role_id" ofType="com.haixia.pojo.Role">  
+		  <id column="role_id" jdbcType="INTEGER" property="roleId"/>  
+		  <result column="role_name" jdbcType="VARCHAR" property="roleName" />
+		  <result column="create_time" jdbcType="VARCHAR" property="createTime" />
+		  <result column="discription" jdbcType="VARCHAR" property="discription" />
+		  <result column="create_user" jdbcType="INTEGER" property="createUser" />
+		  <!-- 再在role中关联role和permission -->  
+		  <collection property="permissionSet" column="permission_id" ofType="com.haixia.pojo.Permission">  
+			  <id column="permission_id" jdbcType="INTEGER" property="permissionId" />  
+			  <result column="permission_name" jdbcType="VARCHAR" property="permissionName"/>  
+			  <result column="permission_type" jdbcType="VARCHAR" property="permissionType"/> 
+			  <result column="permission_url" jdbcType="VARCHAR" property="permissionUrl"/> 
+			  <result column="permission_code" jdbcType="VARCHAR" property="permissionCode"/> 
+			  <result column="parent_id" jdbcType="INTEGER" property="parentId"/> 
+			  <result column="parent_string" jdbcType="VARCHAR" property="parentString"/> 
+			  <result column="permission_status" jdbcType="INTEGER" property="permissionStatus"/> 
+		  </collection>  
+	  </collection>  
+  </resultMap>
+  <sql id="Base_Column_List">
+  SELECT     
+    u.user_id, u.user_name, u.user_pass, u.user_phone, u.is_admin, u.register_time, u.last_login_time, 
+    u.last_login_ip, u.department_id,r.role_id,r.role_name,p.permission_id,p.permission_name,p.permission_type,p.permission_url,p.permission_code,p.parent_string
+  FROM    
+      ic_user as u,    
+      ic_role as r,    
+      ic_permission as p,    
+      ic_role_permission as rp,    
+      ic_user_role as ur    
+    WHERE     
+      ur.user_id = u.user_id    
+    AND    
+      r.role_id = ur.role_id 
+	AND    
+      rp.role_id = r.role_id 
+    AND    
+      p.permission_id = rp.permission_id 
+  </sql>
+  <select id="getById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <include refid="Base_Column_List" />
+    AND u.user_id = #{userId,jdbcType=INTEGER}
+  </select>
+  <select id="getByUserName" parameterType="java.lang.String" resultMap="BaseResultMap">
+    <include refid="Base_Column_List" />
+    AND u.user_name = #{userName,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteById" parameterType="java.lang.Long">
+    delete from ic_user
+    where user_id = #{userId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.haixia.pojo.User">
+    insert into ic_user (user_id, user_name, user_pass, 
+      user_phone, is_admin, register_time, 
+      last_login_time, last_login_ip, department_id
+      )
+    values (#{userId,jdbcType=BIGINT}, #{userName,jdbcType=VARCHAR}, #{userPass,jdbcType=VARCHAR}, 
+      #{userPhone,jdbcType=VARCHAR}, #{isAdmin,jdbcType=INTEGER}, #{registerTime,jdbcType=VARCHAR}, 
+      #{lastLoginTime,jdbcType=VARCHAR}, #{lastLoginIp,jdbcType=VARCHAR}, #{departmentId,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.haixia.pojo.User">
+    insert into ic_user
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="userName != null">
+        user_name,
+      </if>
+      <if test="userPass != null">
+        user_pass,
+      </if>
+      <if test="userPhone != null">
+        user_phone,
+      </if>
+      <if test="isAdmin != null">
+        is_admin,
+      </if>
+      <if test="registerTime != null">
+        register_time,
+      </if>
+      <if test="lastLoginTime != null">
+        last_login_time,
+      </if>
+      <if test="lastLoginIp != null">
+        last_login_ip,
+      </if>
+      <if test="departmentId != null">
+        department_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="userName != null">
+        #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="userPass != null">
+        #{userPass,jdbcType=VARCHAR},
+      </if>
+      <if test="userPhone != null">
+        #{userPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="isAdmin != null">
+        #{isAdmin,jdbcType=INTEGER},
+      </if>
+      <if test="registerTime != null">
+        #{registerTime,jdbcType=VARCHAR},
+      </if>
+      <if test="lastLoginTime != null">
+        #{lastLoginTime,jdbcType=VARCHAR},
+      </if>
+      <if test="lastLoginIp != null">
+        #{lastLoginIp,jdbcType=VARCHAR},
+      </if>
+      <if test="departmentId != null">
+        #{departmentId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByIdSelective" parameterType="com.haixia.pojo.User">
+    update ic_user
+    <set>
+      <if test="userName != null">
+        user_name = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="userPass != null">
+        user_pass = #{userPass,jdbcType=VARCHAR},
+      </if>
+      <if test="userPhone != null">
+        user_phone = #{userPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="isAdmin != null">
+        is_admin = #{isAdmin,jdbcType=INTEGER},
+      </if>
+      <if test="registerTime != null">
+        register_time = #{registerTime,jdbcType=VARCHAR},
+      </if>
+      <if test="lastLoginTime != null">
+        last_login_time = #{lastLoginTime,jdbcType=VARCHAR},
+      </if>
+      <if test="lastLoginIp != null">
+        last_login_ip = #{lastLoginIp,jdbcType=VARCHAR},
+      </if>
+      <if test="departmentId != null">
+        department_id = #{departmentId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where user_id = #{userId,jdbcType=BIGINT}
+  </update>
+  <update id="updateById" parameterType="com.haixia.pojo.User">
+    update ic_user
+    set user_name = #{userName,jdbcType=VARCHAR},
+      user_pass = #{userPass,jdbcType=VARCHAR},
+      user_phone = #{userPhone,jdbcType=VARCHAR},
+      is_admin = #{isAdmin,jdbcType=INTEGER},
+      register_time = #{registerTime,jdbcType=VARCHAR},
+      last_login_time = #{lastLoginTime,jdbcType=VARCHAR},
+      last_login_ip = #{lastLoginIp,jdbcType=VARCHAR},
+      department_id = #{departmentId,jdbcType=INTEGER}
+    where user_id = #{userId,jdbcType=BIGINT}
+  </update>
+</mapper>

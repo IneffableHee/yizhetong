@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE generatorConfiguration    PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"    "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>  
+<!-- 数据库驱动 -->
+	<classPathEntry location="D:\Program Files\Java\soft\apache-maven-3.5.4\mavenrepository\mysql\mysql-connector-java\8.0.12\mysql-connector-java-8.0.12.jar" />
+	<context id="DB2Tables" targetRuntime="MyBatis3">
+		<commentGenerator>
+			<!-- 抑制警告 -->
+            <property name="suppressTypeWarnings" value="true" />
+			<property name="suppressDate" value="true" />              
+			<!-- 是否去除自动生成的注释 true：是 ： false:否 -->
+			<property name="suppressAllComments" value="true" />
+		</commentGenerator>  
+		        
+		<!--数据库链接URL，用户名、密码 -->	
+		<jdbcConnection driverClass="com.mysql.jdbc.Driver"
+			connectionURL="jdbc:mysql://localhost:3306/icdatabase?characterEncoding=utf-8&amp;serverTimezone=UTC&amp;useSSL=false" 
+			userId="root"
+			password="haixia">
+		</jdbcConnection>
+		<javaTypeResolver>
+			<property name="forceBigDecimals" value="false" />
+		</javaTypeResolver>          
+		
+		<!-- 生成模型的包名和位置 -->
+		<javaModelGenerator targetPackage="com.haixia.pojo" targetProject="icdata/src/main/java">
+			<property name="enableSubPackages" value="true" />
+			<property name="trimStrings" value="true" />
+		</javaModelGenerator>          
+		
+		<!-- 生成映射文件的包名和位置 -->
+		<sqlMapGenerator targetPackage="com.haixia.mapper" targetProject="icdata/src/main/java">
+			<property name="enableSubPackages" value="true" />
+		</sqlMapGenerator>          
+		
+		<!-- 生成DAO的包名和位置 -->
+		<javaClientGenerator type="XMLMAPPER"
+			targetPackage="com.haixia.mapper" targetProject="icdata/src/main/java">
+			<property name="enableSubPackages" value="true" />
+		</javaClientGenerator>          
+		
+		<!-- 要生成的表 tableName是数据库中的表名或视图名 domainObjectName是实体类名 -->
+		<!-- <table tableName="user_t"></table> -->
+
+		<!-- <table tableName="ic_department" 
+			domainObjectName="Department" 
+			enableCountByExample="false" 
+			enableUpdateByExample="false" 
+			enableDeleteByExample="false" 
+			enableSelectByExample="false" 
+			selectByExampleQueryId="false">
+		</table>
+		<table tableName="ic_user" 
+			domainObjectName="User" 
+			enableCountByExample="false" 
+			enableUpdateByExample="false" 
+			enableDeleteByExample="false" 
+			enableSelectByExample="false" 
+			selectByExampleQueryId="false">
+		</table>
+		<table tableName="ic_role" 
+			domainObjectName="Role" 
+			enableCountByExample="false" 
+			enableUpdateByExample="false" 
+			enableDeleteByExample="false" 
+			enableSelectByExample="false" 
+			selectByExampleQueryId="false">
+		</table> -->
+		<table tableName="ic_permission" 
+			domainObjectName="Permission" 
+			enableCountByExample="false" 
+			enableUpdateByExample="false" 
+			enableDeleteByExample="false" 
+			enableSelectByExample="false" 
+			selectByExampleQueryId="false">
+		</table> 
+		<!-- <table tableName="ic_menu" 
+			domainObjectName="Menu" 
+			enableCountByExample="false" 
+			enableUpdateByExample="false" 
+			enableDeleteByExample="false" 
+			enableSelectByExample="false" 
+			selectByExampleQueryId="false">
+		</table>
+		<table tableName="ic_operation" 
+			domainObjectName="Operation" 
+			enableCountByExample="false" 
+			enableUpdateByExample="false" 
+			enableDeleteByExample="false" 
+			enableSelectByExample="false" 
+			selectByExampleQueryId="false">
+		</table> -->
+	</context>
+</generatorConfiguration>

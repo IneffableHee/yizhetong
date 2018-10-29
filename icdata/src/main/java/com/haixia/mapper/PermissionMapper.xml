@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.haixia.mapper.IPermissionMapper">
+  <resultMap id="BaseResultMap" type="com.haixia.pojo.Permission">
+    <result column="permission_id" jdbcType="INTEGER" property="permissionId" />
+    <result column="permission_name" jdbcType="VARCHAR" property="permissionName" />
+    <result column="permission_type" jdbcType="VARCHAR" property="permissionType" />
+    <result column="permission_url" jdbcType="VARCHAR" property="permissionUrl" />
+    <result column="permission_code" jdbcType="VARCHAR" property="permissionCode" />
+    <result column="parent_id" jdbcType="INTEGER" property="parentId" />
+    <result column="parent_string" jdbcType="VARCHAR" property="parentString" />
+    <result column="permission_status" jdbcType="INTEGER" property="permissionStatus" />
+  </resultMap>
+  <insert id="insert" parameterType="com.haixia.pojo.Permission">
+    insert into ic_permission (permission_id, permission_name, permission_type, 
+      permission_url, permission_code, parent_id, 
+      parent_string, permission_status)
+    values (#{permissionId,jdbcType=INTEGER}, #{permissionName,jdbcType=VARCHAR}, #{permissionType,jdbcType=VARCHAR}, 
+      #{permissionUrl,jdbcType=VARCHAR}, #{permissionCode,jdbcType=VARCHAR}, #{parentId,jdbcType=INTEGER}, 
+      #{parentString,jdbcType=VARCHAR}, #{permissionStatus,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.haixia.pojo.Permission">
+    insert into ic_permission
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="permissionId != null">
+        permission_id,
+      </if>
+      <if test="permissionName != null">
+        permission_name,
+      </if>
+      <if test="permissionType != null">
+        permission_type,
+      </if>
+      <if test="permissionUrl != null">
+        permission_url,
+      </if>
+      <if test="permissionCode != null">
+        permission_code,
+      </if>
+      <if test="parentId != null">
+        parent_id,
+      </if>
+      <if test="parentString != null">
+        parent_string,
+      </if>
+      <if test="permissionStatus != null">
+        permission_status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="permissionId != null">
+        #{permissionId,jdbcType=INTEGER},
+      </if>
+      <if test="permissionName != null">
+        #{permissionName,jdbcType=VARCHAR},
+      </if>
+      <if test="permissionType != null">
+        #{permissionType,jdbcType=VARCHAR},
+      </if>
+      <if test="permissionUrl != null">
+        #{permissionUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="permissionCode != null">
+        #{permissionCode,jdbcType=VARCHAR},
+      </if>
+      <if test="parentId != null">
+        #{parentId,jdbcType=INTEGER},
+      </if>
+      <if test="parentString != null">
+        #{parentString,jdbcType=VARCHAR},
+      </if>
+      <if test="permissionStatus != null">
+        #{permissionStatus,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+</mapper>
