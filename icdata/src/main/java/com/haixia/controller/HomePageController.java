@@ -51,8 +51,7 @@ public class HomePageController {
 			logger.info(state);
 		}
 		
-		
-		if(user==null) {
+		if(user==null || !user.getUserState().equals("loginSuccess")) {
 			json.put("status",3);
 			json.put("msg","尚未登录，请登录！");
 			return json.toJSONString();

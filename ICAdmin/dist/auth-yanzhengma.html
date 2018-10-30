@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>Greeva - Responsive Bootstrap 4 Admin Dashboard</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description" />
+        <meta content="Coderthemes" name="author" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+        <!-- App favicon -->
+        <link rel="shortcut icon" href="assets/images/favicon.ico">
+
+        <!-- Icons css -->
+        <link href="assets/libs/@mdi/font/css/materialdesignicons.min.css" rel="stylesheet" type="text/css" />
+        <link href="assets/libs/dripicons/webfont/webfont.css" rel="stylesheet" type="text/css" />
+        <link href="assets/libs/simple-line-icons/css/simple-line-icons.css" rel="stylesheet" type="text/css" />
+
+        <!-- App css -->
+        <!-- build:css -->
+        <link href="assets/css/app.css" rel="stylesheet" type="text/css" />
+        <!-- endbuild -->
+
+    </head>
+
+    <body class="bg-account-pages">
+
+        <!-- HOME -->
+        <section>
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+
+                        <div class="wrapper-page">
+                            <div class="account-pages">
+                                <div class="account-box">
+                                    <!-- Logo Box -->
+                                    <div class="account-logo-box">
+                                        <h2 class="text-uppercase text-center">
+                                            <a href="index.html" class="text-success">
+                                                <span><img src="assets/images/logo_dark.png" alt="" height="28"></span>
+                                            </a>
+                                        </h2>
+                                    </div>
+
+                                    <div class="account-content">
+                                        <form class="form-horizontal" action="#">
+                                            <div class="form-group mb-3 text-center">
+                                                <p class="text-muted m-b-0 font-13">请输入手机号<span id="phone">182XXXX8888</span>收到的验证码进行身份验证</p>
+                                            </div>
+
+                                            <div class="form-group mb-3">
+                                            	
+                                                <label for="emailaddress" class="font-weight-medium">验证码:</label>
+                                                <span id="pwTip" class="text-center" style="color: red;"><small></small></span>
+                                                <div class="row" style="width: 100%;margin-left: 0px;">
+                                                	<input class="form-control col-md-8" id="password" name="pw" type="password" required="" id="password" placeholder="6位数验证码">
+                                                	<div class="col-md-1"></div>
+                                                	<button class="btn btn-info float-right col-md-3" id="getyanzhengma">获取验证码</button>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group row text-center">
+                                                <div class="col-12">
+                                                    <button class="btn btn-block btn-success waves-effect waves-light" type="submit">提交</button>
+                                                </div>
+                                            </div>
+                                        </form> <!-- end form -->
+
+                                        <div class="row mt-3">
+                                            <div class="col-12 text-center">
+                                                <p class="text-muted"><a href="auth-login.html" class="text-dark m-l-5">切换账号</a></p>
+                                            </div>
+                                        </div> <!-- end row -->
+
+                                    </div> <!-- end account-content -->
+
+                                </div> <!-- end account-box -->
+                            </div>
+                            <!-- end account-page-->
+                        </div>
+                        <!-- end wrapper-page -->
+
+                    </div> <!-- end col -->
+                </div> <!-- end row -->
+            </div> <!-- end container -->
+        </section>
+        <!-- END HOME -->    
+
+
+        <!-- jQuery  -->
+        <script src="assets/libs/jquery/jquery.min.js"></script>
+        <script src="assets/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
+        <script src="assets/libs/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+
+        <!-- App js -->
+        <script src="assets/js/jquery.core.js"></script>
+        <script src="assets/js/jquery.app.js"></script>
+
+		<script>
+			$(document).ready(function() {
+				
+				var hid = getUrlParam('hid');
+				alert("hid"+hid);
+				var pid = getCookie(hid);
+				alert("pid"+pid);
+				var guid = getCookie("icid");
+				alert("guid"+guid);
+				if(pid==null){
+					window.location.href="auth-login.html";
+					return;
+				}else if(guid==null){
+					window.location.href="auth-login.html";
+					return;
+				}
+				
+				var countdown = 40;
+				settime(countdown);
+			});
+				
+			
+			function settime(countdown) {	
+				x=document.getElementById("getyanzhengma");
+		        if (countdown == 0) {
+		            $("#getyanzhengma").attr("disabled",false);
+		            $("#getyanzhengma").html("获取验证码");
+		        } else {
+		            $("#getyanzhengma").attr("disabled", true);
+		            x.innerHTML="重新发送(" + countdown + ")";
+		            countdown--;
+		            setTimeout(function() {
+		                settime(countdown);
+		            },1000)
+		        }
+		    }
+			
+			function getCookie(c_name) {
+				if (document.cookie.length > 0) {
+					c_start = document.cookie.indexOf(c_name + "=")
+					if (c_start != -1) {
+						c_start = c_start + c_name.length + 1
+						c_end = document.cookie.indexOf(";", c_start)
+						if (c_end == -1) c_end = document.cookie.length
+						return unescape(document.cookie.substring(c_start, c_end))
+					}
+				}
+				return null;
+			}
+			
+			function getUrlParam(name) {
+				var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+				var r = window.location.search.substr(1).match(reg);
+				if (r != null) {
+					return unescape(r[2]);
+				} else {
+					return null;
+				}
+			}
+		</script>
+    </body>
+</html>

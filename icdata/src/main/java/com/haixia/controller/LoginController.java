@@ -86,7 +86,6 @@ public class LoginController {
 //            	json.put("status", 1);
 //            	json.put("token", encrptText);
 //            }
-            user.setUserPhone("110");
             user.setUserState("loginSuccess");
             userService.updateUser(user);
             json.put("status", 1);
@@ -168,7 +167,6 @@ public class LoginController {
 //            	json.put("token", encrptText);
 //            }
             
-            user.setUserPhone("110");
             user.setUserState("loginSuccess");
             userService.updateUser(user);
             json.put("status", 1);
