@@ -44,7 +44,7 @@ public class LoginController {
 	//普通用户登录认证
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     @ResponseBody
-    public String login(HttpServletRequest request,@RequestParam("username") String username,  @RequestParam("password") String password){
+    public String login(HttpServletRequest request,@RequestParam("username") String username,  @RequestParam("password") String password,@RequestParam("guid") String guid){
     	System.out.println("username:"+username+"password:"+Base64.decodeToString(password));
 
     	logger.info("ipaddress"+getIpAddress(request));
@@ -86,7 +86,9 @@ public class LoginController {
 //            	json.put("status", 1);
 //            	json.put("token", encrptText);
 //            }
-            
+            user.setUserPhone("110");
+            user.setUserState("loginSuccess");
+            userService.updateUser(user);
             json.put("status", 1);
         	json.put("token", bs64Token);
         } catch (UnknownAccountException e) {
@@ -116,19 +118,25 @@ public class LoginController {
   //管理员登录认证
     @RequestMapping(value = "/admin", method = RequestMethod.POST)
     @ResponseBody
-    public String admin(HttpServletRequest request,@RequestParam("username") String username,  @RequestParam("password") String password){
-    	System.out.println("username:"+username+"password:"+Base64.decodeToString(password));
-
-    	logger.info("ipaddress"+getIpAddress(request));
+    public String admin(HttpServletRequest request,@RequestParam("username") String username,  @RequestParam("password") String password,@RequestParam("guid") String guid){
+    	System.out.println("username:"+username+"password:"+Base64.decodeToString(password)+"guid:"+guid);
+    	JSONObject json= new JSONObject();
+    	
+    	if(username==null||password==null||guid==null) {
+    		json.put("status", 3);
+        	json.put("msg","用户名或密码错误");
+        	return json.toJSONString();
+    	}
     	
         Subject subject = SecurityUtils.getSubject();
         String upassword =  new Sha256Hash(password,"haixia").toString();
         UsernamePasswordToken token = new UsernamePasswordToken(username, upassword);  
         
-        JSONObject json= new JSONObject();
+        
         try {
             subject.login(token);
-            User user = userService.getByUserName(token.getUsername()); 
+            User user = userService.getByUserPhone(token.getUsername());
+
             logger.info("new UserUtil(user);");
     		UserUtil userT = new UserUtil(user);
     		
@@ -160,6 +168,9 @@ public class LoginController {
 //            	json.put("token", encrptText);
 //            }
             
+            user.setUserPhone("110");
+            user.setUserState("loginSuccess");
+            userService.updateUser(user);
             json.put("status", 1);
         	json.put("token", bs64Token);
         } catch (UnknownAccountException e) {

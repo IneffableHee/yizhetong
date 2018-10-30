@@ -12,8 +12,11 @@ public interface IUserMapper {
     User getById(Integer userId);
     
     User getByUserName(String userName);
+    
+    User getByUserPhone(String userrPhone);
 
     int updateByIdSelective(User record);
 
     int updateById(User record);
+    
 }

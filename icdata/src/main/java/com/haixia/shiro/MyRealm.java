@@ -62,10 +62,16 @@ public class MyRealm extends AuthorizingRealm {
 		 
 		
 		UsernamePasswordToken token = (UsernamePasswordToken) authcToken;
+		logger.info("getByUserName");
 		User user = userService.getByUserName(token.getUsername());
 		// 账号不存在
 		if (user == null) {
-			return null;
+			logger.info("getByUserName = null,getByUserPhone begin!");
+			user = userService.getByUserPhone(token.getUsername());
+			if(user == null) {
+				logger.info("getByUserName = null,getByUserPhone = null");
+				return null;
+			}
 		}
 		ShiroUser shiroUser = new ShiroUser(user.getId(), user.getUserName());
 		// 认证缓存信息

@@ -19,6 +19,10 @@ public class User {
     private String lastLoginTime;
 
     private String lastLoginIp;
+    
+    private String userGuid;
+    
+    private String userState;
 
     private Integer departmentId;
 
@@ -103,4 +107,21 @@ public class User {
     public void setDepartmentId(Integer departmentId) {
         this.departmentId = departmentId;
     }
+    
+    public String getUserGuid() {
+    	return userGuid;
+    }
+    
+    public void setUserGuid(String userGuid) {
+    	this.userGuid = userGuid;
+    }
+    
+    public String getUserState() {
+    	return userState;
+    }
+    
+    public void setUserState(String userState) {
+    	this.userState = userState;
+    }
+    
 }

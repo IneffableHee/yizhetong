@@ -31,7 +31,11 @@ public class UserServiceImpl implements IUserService {
 		// TODO Auto-generated method stub
 		return this.userMapper.getByUserName(userName);
 	}
- 
+	
+	public User getByUserPhone(String userPhone) {
+		return this.userMapper.getByUserPhone(userPhone);
+	}
+	
 	public Set<String> getHomeMenu(User user){
 		Set<String> menuSet = new HashSet<String>();
 		for (Role role : user.getRoles()) {
@@ -44,5 +48,9 @@ public class UserServiceImpl implements IUserService {
 			}
 		}
 		return menuSet;
+	}
+	
+	public void updateUser(User user) {
+		this.userMapper.updateByIdSelective(user);
 	}
 }
