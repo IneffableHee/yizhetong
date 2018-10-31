@@ -58,18 +58,6 @@ public class DepartmentController {
 			return json.toJSONString();
 		}
 		
-//		SMSUtil sms = new SMSUtil();
-//		String verifyCode = sms.getVerifyCode();
-//		SendSmsResponse response;
-//		try {
-//			response = sms.sendSms(user.getUserPhone(),verifyCode);
-//			if(response.getCode() == "OK") {
-//				logger.info("sendSms Sunccess!");
-//			}
-//		} catch (ClientException e) {
-//			e.printStackTrace();
-//		}
-		
 		Set<Department> departments = departmentService.getAll();
 		logger.info(departments.size());
 		for (Department dpt : departments) {  

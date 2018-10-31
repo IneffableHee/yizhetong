@@ -28,11 +28,11 @@ public class SMSUtil {
     static final String accessKeyId = "LTAIA49d1vKOAyiC";
     static final String accessKeySecret = "zgCKFoLW2e6TdUGhOuO4fjQkibPSJ5";
     
-    public static String getVerifyCode() {
+    public String getVerifyCode() {
     	return String.valueOf(new Random().nextInt(899999) + 100000);
     }
     
-    public static SendSmsResponse sendSms(String phoneNumber,String verifyCode) throws ClientException {
+    public SendSmsResponse sendSms(String phoneNumber,String verifyCode) throws ClientException {
     	logger.info("verifyCode:"+verifyCode);
         //可自助调整超时时间
         System.setProperty("sun.net.client.defaultConnectTimeout", "10000");
@@ -69,7 +69,7 @@ public class SMSUtil {
     }
 
 
-    public static QuerySendDetailsResponse querySendDetails(String bizId) throws ClientException {
+    public QuerySendDetailsResponse querySendDetails(String bizId) throws ClientException {
 
         //可自助调整超时时间
         System.setProperty("sun.net.client.defaultConnectTimeout", "10000");

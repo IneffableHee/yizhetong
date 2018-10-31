@@ -23,6 +23,8 @@ public class User {
     private String userGuid;
     
     private String userState;
+    
+    private String userVerify;
 
     private Integer departmentId;
 
@@ -124,4 +126,11 @@ public class User {
     	this.userState = userState;
     }
     
+    public String getUserVerify() {
+    	return userVerify;
+    }
+    
+    public void setUserVerify(String userVerify) {
+    	this.userVerify = userVerify;
+    }
 }

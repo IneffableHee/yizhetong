@@ -12,6 +12,7 @@
     <result column="last_login_ip" jdbcType="VARCHAR" property="lastLoginIp" />
     <result column="user_guid" jdbcType="VARCHAR" property="userGuid" />
     <result column="user_state" jdbcType="VARCHAR" property="userState" />
+    <result column="user_verify" jdbcType="VARCHAR" property="userVerify" />
     <result column="department_id" jdbcType="INTEGER" property="departmentId" />
     <!-- 进行 多表关联插叙，先关联user和role -->  
 	  <collection property="roleSet" column="role_id" ofType="com.haixia.pojo.Role">  
@@ -36,7 +37,7 @@
   <sql id="Base_Column_List">
   SELECT     
     u.user_id, u.user_name, u.user_pass, u.user_phone, u.is_admin, u.register_time, u.last_login_time, 
-    u.last_login_ip, u.user_guid,u.user_state,u.department_id,r.role_id,r.role_name,p.permission_id,p.permission_name,p.permission_type,p.permission_url,p.permission_code,p.parent_string
+    u.last_login_ip, u.user_guid,u.user_verify,u.user_state,u.department_id,r.role_id,r.role_name,p.permission_id,p.permission_name,p.permission_type,p.permission_url,p.permission_code,p.parent_string
   FROM    
       ic_user as u,    
       ic_role as r,    
@@ -171,6 +172,9 @@
       </if>
       <if test="userState != null">
         user_state = #{userState,jdbcType=VARCHAR},
+      </if>
+      <if test="userVerify != null">
+        user_verify = #{userVerify,jdbcType=VARCHAR},
       </if>
     </set>
     where user_id = #{userId,jdbcType=BIGINT}

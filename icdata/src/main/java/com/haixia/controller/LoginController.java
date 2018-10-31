@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.alibaba.fastjson.JSONObject;
 import com.haixia.pojo.User;
 import com.haixia.service.IUserService;
+import com.haixia.util.Tool;
 import com.haixia.util.UserUtil;
 
 @Controller
@@ -87,17 +88,22 @@ public class LoginController {
     		String bs64Token = Base64.encodeToString(tokenText.getBytes());
 
             logger.info("loginid:"+session.getId()+"bs64加密解密:"+bs64Token+"[]"+tokenText);
-//            if(Base64.decodeToString(password)=="666666") {	//默认密码
-//            	json.put("status", 0);
-//            }else if(getIpAddress(request)!=user.getLastLoginIp()) {	//更换设备
-//            	json.put("status", 2);
-//            }else {		//登陆成功
-//            	json.put("status", 1);
-//            	json.put("token", encrptText);
-//            }
-            user.setUserState("loginSuccess");
+            logger.info("loginipwd:"+Base64.decodeToString(password));
+            if(Base64.decodeToString(password)=="123456") {	//默认密码
+            	json.put("status", 0);
+            	Tool tool = new Tool();
+            	logger.info("setUserGuid:"+tool.getUUID());
+            	user.setUserGuid(tool.getUUID());
+            }else if(guid==null || guid != user.getUserGuid()) {	//新设备或更换设备
+            	json.put("status", 2);
+            	Tool tool = new Tool();
+            	logger.info("setUserGuid:"+tool.getUUID());
+            	user.setUserGuid(tool.getUUID());
+            }else {		//登陆成功
+            	json.put("status", 1);
+            	user.setUserState("loginSuccess");
+            }
             userService.updateUser(user);
-            json.put("status", 1);
         	json.put("token", bs64Token);
         } catch (UnknownAccountException e) {
             logger.error("账号不存在：{}", e);
@@ -174,18 +180,25 @@ public class LoginController {
     		String bs64Token = Base64.encodeToString(tokenText.getBytes());
 
             logger.info("loginid:"+session.getId()+"bs64加密解密:"+bs64Token+"[]"+tokenText);
-//            if(Base64.decodeToString(password)=="666666") {	//默认密码
-//            	json.put("status", 0);
-//            }else if(getIpAddress(request)!=user.getLastLoginIp()) {	//更换设备
-//            	json.put("status", 2);
-//            }else {		//登陆成功
-//            	json.put("status", 1);
-//            	json.put("token", encrptText);
-//            }
-            
-            user.setUserState("loginSuccess");
+            if(Base64.decodeToString(password).equals("123456")) {	//默认密码
+            	json.put("status", 0);
+            	Tool tool = new Tool();
+            	String uuid = tool.getUUID();
+            	logger.info("setUserGuid:"+uuid);
+            	user.setUserGuid(uuid);
+            	json.put("guid", uuid);
+            }else if(guid==null || guid != user.getUserGuid()) {	//新设备或更换设备
+            	json.put("status", 2);
+            	Tool tool = new Tool();
+            	String uuid = tool.getUUID();
+            	logger.info("setUserGuid:"+uuid);
+            	user.setUserGuid(uuid);
+            	json.put("guid", uuid);
+            }else {		//登陆成功
+            	json.put("status", 1);
+            	user.setUserState("loginSuccess");
+            }
             userService.updateUser(user);
-            json.put("status", 1);
         	json.put("token", bs64Token);
         } catch (UnknownAccountException e) {
             logger.error("账号不存在：{}", e);
@@ -211,6 +224,14 @@ public class LoginController {
         return json.toJSONString();
     }
 
+    @RequestMapping(value = "/defaultPwd", method = RequestMethod.POST)
+    @ResponseBody
+    public String defaultPwd(HttpServletRequest request,@RequestParam("tel") String tel,  @RequestParam("verify") String verify,@RequestParam("password") String password){
+    	System.out.println("tel:"+tel+"password:"+Base64.decodeToString(password)+"verify:"+verify);
+    	JSONObject json= new JSONObject();
+    	
+    	return json.toJSONString(); 
+    }
     /**
      * 获取ip地址
      * 
