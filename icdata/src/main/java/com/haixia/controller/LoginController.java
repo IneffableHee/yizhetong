@@ -27,7 +27,7 @@ import com.haixia.util.UserUtil;
 
 @Controller
 public class LoginController {
-	private static Logger logger = Logger.getLogger(UserController.class);
+	private static Logger logger = Logger.getLogger(LoginController.class);
 	
 	@Resource
 	private IUserService userService;
@@ -56,9 +56,18 @@ public class LoginController {
         JSONObject json= new JSONObject();
         try {
             subject.login(token);
-            User user = userService.getByUserName(token.getUsername());     
+            User user = userService.getByUserName(token.getUsername());  
+            if(user == null)
+            	user = userService.getByUserPhone(token.getUsername()); 
+            
+            if(user == null) {
+            	json.put("status", 3);
+            	json.put("msg","账号不存在");
+            	return json.toJSONString();
+            }
             
             UserUtil userT = new UserUtil(user);
+            logger.info("userT:"+userT);
             if(!userT.hasRole("PartmentStaff")) {
             	json.put("status", 3);
             	json.put("msg","账号不存在");
@@ -131,15 +140,22 @@ public class LoginController {
         String upassword =  new Sha256Hash(password,"haixia").toString();
         UsernamePasswordToken token = new UsernamePasswordToken(username, upassword);  
         
-        
         try {
             subject.login(token);
             User user = userService.getByUserPhone(token.getUsername());
-
+            if(user == null)
+            	user = userService.getByUserName(token.getUsername());
+            
+            if(user == null) {
+            	json.put("status", 3);
+            	json.put("msg","账号不存在");
+            	return json.toJSONString();
+            }
+            
             logger.info("new UserUtil(user);");
     		UserUtil userT = new UserUtil(user);
-    		
-            if(userT.hasRole("PartmentStaff")) {
+    		logger.info("userT.hasRole");
+            if(!userT.hasRole("Admin") && !userT.hasRole("GeneralAdmin")) {
             	json.put("status", 3);
             	json.put("msg","账号不存在");
             	return json.toJSONString();

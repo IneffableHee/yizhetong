@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.haixia.mapper.DepartmentMapper">
+<mapper namespace="com.haixia.mapper.IDepartmentMapper">
   <resultMap id="BaseResultMap" type="com.haixia.pojo.Department">
     <id column="department_id" jdbcType="INTEGER" property="departmentId" />
     <result column="department_name" jdbcType="VARCHAR" property="departmentName" />
@@ -16,6 +16,11 @@
     <include refid="Base_Column_List" />
     from ic_department
     where department_id = #{departmentId,jdbcType=INTEGER}
+  </select>
+  <select id="getAll" resultMap="BaseResultMap">
+	  select 
+	  <include refid="Base_Column_List" />
+	  from ic_department
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from ic_department
@@ -90,4 +95,5 @@
       create_time = #{createTime,jdbcType=VARCHAR}
     where department_id = #{departmentId,jdbcType=INTEGER}
   </update>
+  
 </mapper>

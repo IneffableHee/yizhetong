@@ -8,14 +8,13 @@ import org.apache.log4j.Logger;
 import org.apache.shiro.codec.Base64;
 import org.apache.shiro.session.Session;
 
-import com.haixia.controller.UserController;
 import com.haixia.pojo.Permission;
 import com.haixia.pojo.Role;
 import com.haixia.pojo.User;
 import com.haixia.service.IUserService;
 
 public class UserUtil {
-	private static Logger logger = Logger.getLogger(UserController.class);
+	private static Logger logger = Logger.getLogger(UserUtil.class);
 	
 	private User user;
 	
@@ -31,10 +30,14 @@ public class UserUtil {
 	}
 	
 	public boolean hasRole(String ckRole) {
-		for (Role role : user.getRoles()) {
-			if(ckRole.equals(role.getRoleName().toString())) {
-				logger.info("UserUtil hasRole:"+role.getRoleName().toString());
-				return true;
+		if(user.getRoles()!=null) {
+			logger.info(user.getRoles().size());
+			for (Role role : user.getRoles()) {
+				logger.info(role.getRoleName().toString());
+				if(ckRole.equals(role.getRoleName().toString())) {
+					logger.info("UserUtil hasRole:"+role.getRoleName().toString());
+					return true;
+				}
 			}
 		}
 		return false;

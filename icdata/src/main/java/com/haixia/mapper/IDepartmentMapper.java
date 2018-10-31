@@ -1,5 +1,7 @@
 package com.haixia.mapper;
 
+import java.util.Set;
+
 import com.haixia.pojo.Department;
 
 public interface IDepartmentMapper {
@@ -14,4 +16,6 @@ public interface IDepartmentMapper {
     int updateByPrimaryKeySelective(Department record);
 
     int updateByPrimaryKey(Department record);
+    
+    Set<Department> getAll();
 }

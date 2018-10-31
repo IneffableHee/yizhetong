@@ -37,31 +37,31 @@ public class TestSSM {
  
 	@Test
 	public void test1() {
-		SMSUtil sms = new SMSUtil();
-		SendSmsResponse response;
-		try {
-			response = sms.sendSms();
-			System.out.println("短信接口返回的数据----------------");
-		    System.out.println("Code=" + response.getCode());
-		    System.out.println("Message=" + response.getMessage());
-		    System.out.println("RequestId=" + response.getRequestId());
-		    System.out.println("BizId=" + response.getBizId());
-		} catch (ClientException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//		SMSUtil sms = new SMSUtil();
+//		SendSmsResponse response;
+//		try {
+//			response = sms.sendSms();
+//			System.out.println("短信接口返回的数据----------------");
+//		    System.out.println("Code=" + response.getCode());
+//		    System.out.println("Message=" + response.getMessage());
+//		    System.out.println("RequestId=" + response.getRequestId());
+//		    System.out.println("BizId=" + response.getBizId());
+//		} catch (ClientException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 	    
 		
-//		User user = userService.getById(1);
-////		User user = userService.getByUserName("刘德华");
-//		// System.out.println(user.getUserName());
-//		for (Role role : user.getRoles()) {
-//			logger.info(role.getRoleName());
-//			for(Permission permission:role.getPermissions()) {
-//				logger.info(permission.getPermissionName());
-//			}
-//		}
-//		logger.info("getByUsername 值："+user.getUserName()+user.getPassword()+user.getUserName());
-//		logger.info(JSON.toJSONString(user));
+		User user = userService.getById(1);
+//		User user = userService.getByUserName("刘德华");
+		// System.out.println(user.getUserName());
+		for (Role role : user.getRoles()) {
+			logger.info(role.getRoleName());
+			for(Permission permission:role.getPermissions()) {
+				logger.info(permission.getPermissionName());
+			}
+		}
+		logger.info("getByUsername 值："+user.getUserName()+user.getPassword()+user.getUserName());
+		logger.info(JSON.toJSONString(user));
 	}
 }
