@@ -83,7 +83,7 @@ public class VerifyCodeController {
 		String verify = Base64.encodeToString((verifyCode+time).getBytes());
 		logger.info("verify:"+verify);
 		user.setUserVerify(verify);
-		user.setUserState("firstPwd");
+		user.setUserState("changePwd");
 		userService.updateUser(user);
 		json.put("status",1);
 		return json.toJSONString();

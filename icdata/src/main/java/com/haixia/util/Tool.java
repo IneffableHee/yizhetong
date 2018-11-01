@@ -33,6 +33,23 @@ public class Tool {
 		 return false;
 	 }
 	 
+	 public static int pswCheckVerify(User user,String verify) {
+		 String lastVerify = user.getUserVerify();
+		 if(lastVerify == null)
+			 return 0;
+		 String decVerify = Base64.decodeToString(lastVerify);
+		 if(!decVerify.substring(0, 6).equals(verify)) {
+			 return 0;
+		 }
+		 Long lastTime = Long.parseLong(decVerify.substring(6));
+		 Long now =System.currentTimeMillis();
+		 Long dis = getDistanceTime(now,lastTime);
+		 if(dis>=300)
+			 return 1;
+		 else 
+			 return 2;
+	 }
+	 
 	 public static long getDistanceTime(long time1, long time2) {
 		    long day = 0;
 		    long hour = 0;
