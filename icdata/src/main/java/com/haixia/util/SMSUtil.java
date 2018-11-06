@@ -32,7 +32,7 @@ public class SMSUtil {
     	return String.valueOf(new Random().nextInt(899999) + 100000);
     }
     
-    public SendSmsResponse sendSms(String phoneNumber,String verifyCode) throws ClientException {
+    public SendSmsResponse sendSms(String phoneNumber,String verifyCode,String type) throws ClientException {
     	logger.info("verifyCode:"+verifyCode);
         //可自助调整超时时间
         System.setProperty("sun.net.client.defaultConnectTimeout", "10000");
@@ -50,7 +50,12 @@ public class SMSUtil {
         //必填:短信签名-可在短信控制台中找到
         request.setSignName("一折通数据平台");
         //必填:短信模板-可在短信控制台中找到
-        request.setTemplateCode("SMS_149422494");
+        if(type.equals("password")) {
+        	request.setTemplateCode("SMS_149422500");
+        }else if(type.equals("login")) {
+        	request.setTemplateCode("SMS_149422494");
+        }
+        
         //可选:模板中的变量替换JSON串,如模板内容为"亲爱的${name},您的验证码为${code}"时,此处的值为
         JSONObject json= new JSONObject();
         json.put("code", verifyCode);

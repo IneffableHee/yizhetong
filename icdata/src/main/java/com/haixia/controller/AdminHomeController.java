@@ -1,6 +1,7 @@
 package com.haixia.controller;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 import javax.annotation.Resource;
@@ -22,10 +23,9 @@ import com.haixia.service.IUserService;
 import com.haixia.util.UserUtil;
 
 @Controller
-@RequestMapping("/index")
-public class HomePageController {
-
-	private static Logger logger = Logger.getLogger(UserController.class);
+@RequestMapping("/home")
+public class AdminHomeController {
+private static Logger logger = Logger.getLogger(UserController.class);
 	
 	@Autowired
 	private SessionDAO sessionDAO;
@@ -51,13 +51,14 @@ public class HomePageController {
 			return json.toJSONString();
 		}
 		
-		Set<String> menus = this.userService.getUserHomeMenu(user);
+		Set<User> users = this.userService.getAll();
+		logger.info(users);
+		
+		Set<String> menus = this.userService.getAdminHomeMenu(user);
 		
 		json.put("userName",user.getUserName());
 		json.put("currentUserId",user.getId());
 		json.put("menu",menus);
 		return json.toJSONString();
 	}
-	
-
 }

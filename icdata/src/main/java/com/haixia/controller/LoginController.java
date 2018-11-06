@@ -1,5 +1,7 @@
 package com.haixia.controller;
 
+import java.util.Collection;
+
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
@@ -13,7 +15,9 @@ import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.codec.Base64;
 import org.apache.shiro.crypto.hash.Sha256Hash;
 import org.apache.shiro.session.Session;
+import org.apache.shiro.session.mgt.eis.SessionDAO;
 import org.apache.shiro.subject.Subject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -33,6 +37,9 @@ public class LoginController {
 	@Resource
 	private IUserService userService;
 	
+	@Autowired
+	private SessionDAO sessionDAO;
+	
 	@RequestMapping(value = "/loginTest", method = RequestMethod.POST)
     @ResponseBody
     public String CeShi(@RequestParam("pw") String pw, @RequestParam("name") String name) {
@@ -43,7 +50,7 @@ public class LoginController {
     }
 	
 	//普通用户登录认证
-    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    @RequestMapping(value = "/user/login", method = RequestMethod.POST)
     @ResponseBody
     public String login(HttpServletRequest request,@RequestParam("username") String username,  @RequestParam("password") String password,@RequestParam("guid") String guid){
     	System.out.println("username:"+username+"password:"+Base64.decodeToString(password));
@@ -130,7 +137,7 @@ public class LoginController {
     }
     
   //管理员登录认证
-    @RequestMapping(value = "/admin", method = RequestMethod.POST)
+    @RequestMapping(value = "/admin/login", method = RequestMethod.POST)
     @ResponseBody
     public String admin(HttpServletRequest request,@RequestParam("username") String username,  @RequestParam("password") String password,@RequestParam("guid") String guid){
     	System.out.println("username:"+username+"password:"+Base64.decodeToString(password)+"guid:"+guid);
@@ -181,20 +188,24 @@ public class LoginController {
 
             logger.info("loginid:"+session.getId()+"bs64加密解密:"+bs64Token+"[]"+tokenText);
             if(Base64.decodeToString(password).equals("123456")) {	//默认密码
+            	logger.info("默认密码");
             	json.put("status", 0);
             	Tool tool = new Tool();
             	String uuid = tool.getUUID();
             	logger.info("setUserGuid:"+uuid);
             	user.setUserGuid(uuid);
             	json.put("guid", uuid);
-            }else if(guid==null || guid != user.getUserGuid()) {	//新设备或更换设备
+            }else if(guid==null || !guid.equals(user.getUserGuid())) {	//新设备或更换设备
+            	logger.info("新设备或更换设备,uid:"+user.getUserGuid());
             	json.put("status", 2);
+            	json.put("tel",user.getUserPhone());
             	Tool tool = new Tool();
             	String uuid = tool.getUUID();
             	logger.info("setUserGuid:"+uuid);
             	user.setUserGuid(uuid);
             	json.put("guid", uuid);
             }else {		//登陆成功
+            	logger.info("登陆成功");
             	json.put("status", 1);
             	user.setUserState("loginSuccess");
             }
@@ -224,13 +235,43 @@ public class LoginController {
         return json.toJSONString();
     }
 
-    @RequestMapping(value = "/defaultPwd", method = RequestMethod.POST)
+    @RequestMapping(value = "/newDevice", method = RequestMethod.POST)
     @ResponseBody
-    public String defaultPwd(HttpServletRequest request,@RequestParam("tel") String tel,  @RequestParam("verify") String verify,@RequestParam("password") String password){
-    	System.out.println("tel:"+tel+"password:"+Base64.decodeToString(password)+"verify:"+verify);
+    public String defaultPwd(HttpServletRequest request,@RequestParam("sid") String sid,  @RequestParam("verify") String verify){
+    	System.out.println("sid:"+sid+"verify:"+verify);
     	JSONObject json= new JSONObject();
+    	if(sid==null||verify==null) {
+    		json.put("status",6);
+    		json.put("msg","请重新验证！");
+			return json.toJSONString();
+    	}
     	
-    	return json.toJSONString(); 
+    	UserUtil userT = new UserUtil();
+		Collection<Session> sessions = sessionDAO.getActiveSessions();
+		String userName = userT.checkLoginUser(sid,sessions);
+		User user =userService.getByUserName(userName);
+		if(user == null)
+			user =userService.getByUserPhone(userName);
+
+		if(user==null) {
+			json.put("status",6);
+			json.put("msg","尚未登录，请登录！");
+			return json.toJSONString();
+		}
+    	
+		Tool tool = new Tool();
+		if(tool.pswCheckVerify(user,verify)==0) {
+    		json.put("status", 6);
+    		json.put("msg", "验证码错误！");
+    		return json.toJSONString();
+    	}
+    	if(tool.pswCheckVerify(user,verify)==1) {
+    		json.put("status", 6);
+    		json.put("msg", "验证码超时，请重新获取！");
+    		return json.toJSONString();
+    	}
+    	json.put("status",1);
+		return json.toJSONString();
     }
     /**
      * 获取ip地址

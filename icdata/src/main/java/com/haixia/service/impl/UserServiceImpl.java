@@ -1,6 +1,7 @@
 package com.haixia.service.impl;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.annotation.Resource;
@@ -36,7 +37,7 @@ public class UserServiceImpl implements IUserService {
 		return this.userMapper.getByUserPhone(userPhone);
 	}
 	
-	public Set<String> getHomeMenu(User user){
+	public Set<String> getUserHomeMenu(User user){
 		Set<String> menuSet = new HashSet<String>();
 		for (Role role : user.getRoles()) {
 			logger.info("Role:");
@@ -50,7 +51,25 @@ public class UserServiceImpl implements IUserService {
 		return menuSet;
 	}
 	
+	public Set<String> getAdminHomeMenu(User user){
+		Set<String> menuSet = new HashSet<String>();
+		for (Role role : user.getRoles()) {
+			logger.info("Role:");
+			for (Permission permission : role.getPermissions()) {
+				if(permission.getParentString().equals("1/21")) {
+					menuSet.add(permission.getPermissionName());
+					logger.info("---Permission:"+permission.getPermissionUrl());
+				}
+			}
+		}
+		return menuSet;
+	}
+	
 	public void updateUser(User user) {
-		this.userMapper.updateByIdSelective(user);
+		this.userMapper.updateById(user);
+	}
+	
+	public Set<User> getAll(){
+		return this.userMapper.getAll();
 	}
 }

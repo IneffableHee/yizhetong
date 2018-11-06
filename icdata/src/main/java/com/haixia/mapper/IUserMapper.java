@@ -1,5 +1,8 @@
 package com.haixia.mapper;
 
+import java.util.List;
+import java.util.Set;
+
 import com.haixia.pojo.User;
 
 public interface IUserMapper {
@@ -7,7 +10,7 @@ public interface IUserMapper {
 
     int insert(User record);
 
-    int insertSelective(User record);
+//    int insertSelective(User record);
 
     User getById(Integer userId);
     
@@ -15,8 +18,10 @@ public interface IUserMapper {
     
     User getByUserPhone(String userrPhone);
 
-    int updateByIdSelective(User record);
+//    int updateByIdSelective(User record);
 
     int updateById(User record);
+    
+    Set<User> getAll();
     
 }

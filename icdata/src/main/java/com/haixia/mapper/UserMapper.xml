@@ -69,7 +69,18 @@
     delete from ic_user
     where user_id = #{userId,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="com.haixia.pojo.User">
+  <select id="getAll" resultMap="BaseResultMap">
+    SELECT     
+	    u.user_id, u.user_name, u.user_pass, u.user_phone, u.is_admin, u.register_time, u.last_login_time, 
+	    u.last_login_ip, u.user_guid,u.user_verify,u.user_state,u.department_id,r.role_id,r.role_name,p.permission_id,p.permission_name,p.permission_type,p.permission_url,p.permission_code,p.parent_string
+	  FROM    
+	      ic_user as u,    
+	      ic_role as r,    
+	      ic_permission as p,    
+	      ic_role_permission as rp,    
+	      ic_user_role as ur
+  </select>
+<!--   <insert id="insert" parameterType="com.haixia.pojo.User">
     insert into ic_user (user_id, user_name, user_pass, 
       user_phone, is_admin, register_time, 
       last_login_time, last_login_ip, department_id
@@ -78,7 +89,7 @@
       #{userPhone,jdbcType=VARCHAR}, #{isAdmin,jdbcType=INTEGER}, #{registerTime,jdbcType=VARCHAR}, 
       #{lastLoginTime,jdbcType=VARCHAR}, #{lastLoginIp,jdbcType=VARCHAR}, #{departmentId,jdbcType=INTEGER}
       )
-  </insert>
+  </insert> -->
   <insert id="insertSelective" parameterType="com.haixia.pojo.User">
     insert into ic_user
     <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -140,7 +151,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByIdSelective" parameterType="com.haixia.pojo.User">
+  <update id="updateById" parameterType="com.haixia.pojo.User">
     update ic_user
     <set>
       <if test="userName != null">
@@ -179,7 +190,7 @@
     </set>
     where user_id = #{userId,jdbcType=BIGINT}
   </update>
-  <update id="updateById" parameterType="com.haixia.pojo.User">
+<!--   <update id="updateById" parameterType="com.haixia.pojo.User">
     update ic_user
     set user_name = #{userName,jdbcType=VARCHAR},
       user_pass = #{userPass,jdbcType=VARCHAR},
@@ -190,5 +201,5 @@
       last_login_ip = #{lastLoginIp,jdbcType=VARCHAR},
       department_id = #{departmentId,jdbcType=INTEGER}
     where user_id = #{userId,jdbcType=BIGINT}
-  </update>
+  </update> -->
 </mapper>

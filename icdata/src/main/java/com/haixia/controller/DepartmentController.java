@@ -67,6 +67,84 @@ public class DepartmentController {
         json.put("department", JSONObject.toJSON(departments));
         return json.toJSONString();
 	}
-
 	
+	@ResponseBody
+	@RequestMapping("/get")public String get(@RequestParam("sid") String sid) {
+		JSONObject json= new JSONObject();
+		
+		UserUtil userT = new UserUtil();
+		Collection<Session> sessions = sessionDAO.getActiveSessions();
+		String userName = userT.checkLoginUser(sid,sessions);
+		User user =userService.getByUserName(userName);
+		if(user == null)
+			user =userService.getByUserPhone(userName);
+
+		if(user==null || !user.getUserState().equals("loginSuccess")) {
+			json.put("status",4);
+			json.put("msg","尚未登录，请登录！");
+			return json.toJSONString();
+		}
+		
+		return json.toJSONString();
+	}
+	
+	@ResponseBody
+	@RequestMapping("/create")public String create(@RequestParam("sid") String sid) {
+		JSONObject json= new JSONObject();
+		
+		UserUtil userT = new UserUtil();
+		Collection<Session> sessions = sessionDAO.getActiveSessions();
+		String userName = userT.checkLoginUser(sid,sessions);
+		User user =userService.getByUserName(userName);
+		if(user == null)
+			user =userService.getByUserPhone(userName);
+
+		if(user==null || !user.getUserState().equals("loginSuccess")) {
+			json.put("status",4);
+			json.put("msg","尚未登录，请登录！");
+			return json.toJSONString();
+		}
+		
+		return json.toJSONString();
+	}
+	
+	@ResponseBody
+	@RequestMapping("/update")public String update(@RequestParam("sid") String sid) {
+		JSONObject json= new JSONObject();
+		
+		UserUtil userT = new UserUtil();
+		Collection<Session> sessions = sessionDAO.getActiveSessions();
+		String userName = userT.checkLoginUser(sid,sessions);
+		User user =userService.getByUserName(userName);
+		if(user == null)
+			user =userService.getByUserPhone(userName);
+
+		if(user==null || !user.getUserState().equals("loginSuccess")) {
+			json.put("status",4);
+			json.put("msg","尚未登录，请登录！");
+			return json.toJSONString();
+		}
+		
+		return json.toJSONString();
+	}
+	
+	@ResponseBody
+	@RequestMapping("/delete")public String delete(@RequestParam("sid") String sid) {
+		JSONObject json= new JSONObject();
+		
+		UserUtil userT = new UserUtil();
+		Collection<Session> sessions = sessionDAO.getActiveSessions();
+		String userName = userT.checkLoginUser(sid,sessions);
+		User user =userService.getByUserName(userName);
+		if(user == null)
+			user =userService.getByUserPhone(userName);
+
+		if(user==null || !user.getUserState().equals("loginSuccess")) {
+			json.put("status",4);
+			json.put("msg","尚未登录，请登录！");
+			return json.toJSONString();
+		}
+		
+		return json.toJSONString();
+	}
 }

@@ -38,7 +38,7 @@ public class VerifyCodeController {
 	
 	@RequestMapping(value = "/get", method = RequestMethod.POST)
     @ResponseBody
-    public String get(HttpServletRequest request,@RequestParam("tel") String tel){
+    public String get(HttpServletRequest request,@RequestParam("tel") String tel,@RequestParam("type") String password){
 		JSONObject json= new JSONObject();
 		User user =userService.getByUserPhone(tel);
 			
@@ -58,7 +58,7 @@ public class VerifyCodeController {
 		String verifyCode = sms.getVerifyCode();
         SendSmsResponse response;
 		try {
-			response = sms.sendSms(tel,verifyCode);
+			response = sms.sendSms(tel,verifyCode,password);
 			logger.info(response.getCode());
 			if(response.getCode().toString().toString().equals("OK")) {
 				logger.info("sendSms Sunccess!");
