@@ -30,35 +30,43 @@ private static Logger logger = Logger.getLogger(UserController.class);
 	@Autowired
 	private SessionDAO sessionDAO;
 	
-	@Resource
-	private IUserService userService;
-	
 	@RequestMapping(value = "/getMenu", method = RequestMethod.POST)
     @ResponseBody
     public String getMenu(HttpServletRequest request,@RequestParam("sid") String sid){
 		JSONObject json= new JSONObject();
+		if(sid == "" || sid == null) {
+			json.put("status",3);
+			json.put("msg","尚未登录，请登录！");
+			return json.toJSONString();
+		}
 
-		UserUtil userT = new UserUtil();
+		loginUtil userT = new loginUtil();
+		logger.info("checkLoginUser2 begin,sid:"+sid);
 		Collection<Session> sessions = sessionDAO.getActiveSessions();
-		String userName = userT.checkLoginUser(sid,sessions);
-		User user =userService.getByUserName(userName);
-		if(user == null)
-			user =userService.getByUserPhone(userName);
+		User currentUser = userT.checkLoginUser(request,sid,sessions);
+//		UserUtil userT = new UserUtil();
+//		logger.info("checkLoginUser2 begin");
+//		User currentUser = userT.checkLoginUser2(sid);
+//		Collection<Session> sessions = sessionDAO.getActiveSessions();
+//		String userName = userT.checkLoginUser(sid,sessions);
+//		User user =userService.getByUserName(userName);
+//		if(user == null)
+//			user =userService.getByUserPhone(userName);
 
-		if(user==null || !user.getUserState().equals("loginSuccess")) {
+		if(currentUser==null) {
 			json.put("status",3);
 			json.put("msg","尚未登录，请登录！");
 			return json.toJSONString();
 		}
 		
-		Set<User> users = this.userService.getAll();
-		logger.info(users);
+//		Set<User> users = this.userService.getAll();
+//		logger.info(users);
+//		
+//		Set<String> menus = this.userService.getAdminHomeMenu(currentUser);
 		
-		Set<String> menus = this.userService.getAdminHomeMenu(user);
-		
-		json.put("userName",user.getUserName());
-		json.put("currentUserId",user.getId());
-		json.put("menu",menus);
+		json.put("userName",currentUser.getUserName());
+		json.put("currentUserId",currentUser.getId());
+//		json.put("menu",menus);
 		return json.toJSONString();
 	}
 }

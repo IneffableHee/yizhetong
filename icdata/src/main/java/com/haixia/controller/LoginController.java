@@ -195,15 +195,15 @@ public class LoginController {
             	logger.info("setUserGuid:"+uuid);
             	user.setUserGuid(uuid);
             	json.put("guid", uuid);
-            }else if(guid==null || !guid.equals(user.getUserGuid())) {	//新设备或更换设备
-            	logger.info("新设备或更换设备,uid:"+user.getUserGuid());
-            	json.put("status", 2);
-            	json.put("tel",user.getUserPhone());
-            	Tool tool = new Tool();
-            	String uuid = tool.getUUID();
-            	logger.info("setUserGuid:"+uuid);
-            	user.setUserGuid(uuid);
-            	json.put("guid", uuid);
+//            }else if(guid==null || !guid.equals(user.getUserGuid())) {	//新设备或更换设备
+//            	logger.info("新设备或更换设备,uid:"+user.getUserGuid());
+//            	json.put("status", 2);
+//            	json.put("tel",user.getUserPhone());
+//            	Tool tool = new Tool();
+//            	String uuid = tool.getUUID();
+//            	logger.info("setUserGuid:"+uuid);
+//            	user.setUserGuid(uuid);
+//            	json.put("guid", uuid);
             }else {		//登陆成功
             	logger.info("登陆成功");
             	json.put("status", 1);

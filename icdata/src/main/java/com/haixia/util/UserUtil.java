@@ -7,6 +7,8 @@ import javax.annotation.Resource;
 import org.apache.log4j.Logger;
 import org.apache.shiro.codec.Base64;
 import org.apache.shiro.session.Session;
+import org.apache.shiro.session.mgt.eis.SessionDAO;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.haixia.pojo.Permission;
 import com.haixia.pojo.Role;
@@ -15,6 +17,9 @@ import com.haixia.service.IUserService;
 
 public class UserUtil {
 	private static Logger logger = Logger.getLogger(UserUtil.class);
+	
+	@Autowired
+	private SessionDAO sessionDAO;
 	
 	private User user;
 	
@@ -71,11 +76,40 @@ public class UserUtil {
 			System.out.println("登录用户"+session.getAttribute("currentUser"));
 			System.out.println("最后操作日期:"+session.getLastAccessTime());
 			if(uid.equals(session.getId().toString())) {
+				session.setTimeout(1800000);
 				userName = session.getAttribute("currentUser").toString();
 				logger.info("currentUser"+userName);
 				break;
 			}
 		}
 		return userName;
+	}
+	
+	public User checkLoginUser2(String sid) {
+		Collection<Session> sessions = sessionDAO.getActiveSessions();
+		logger.info("sid:"+sid);
+		String decodeText = Base64.decodeToString(sid);
+		logger.info("decodesid:"+decodeText);
+		String[] splitstr=decodeText.split("&");
+		String uid = Base64.decodeToString(splitstr[0]);
+		logger.info("uid:"+uid);
+		
+		User user=null;
+		for(Session session:sessions){
+			System.out.println("登录ip:"+session.getHost());
+			System.out.println("登录id:"+session.getId());
+			System.out.println("登录用户"+session.getAttribute("currentUser"));
+			System.out.println("最后操作日期:"+session.getLastAccessTime());
+			if(uid.equals(session.getId().toString())) {
+				session.setTimeout(1800000);
+				String userName = session.getAttribute("currentUser").toString();
+				user =userService.getByUserName(userName);
+				if(user == null)
+					user =userService.getByUserPhone(userName);
+				logger.info("currentUser"+userName);
+				break;
+			}
+		}
+		return user;
 	}
 }

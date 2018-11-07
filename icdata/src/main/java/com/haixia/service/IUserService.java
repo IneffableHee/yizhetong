@@ -1,9 +1,7 @@
 package com.haixia.service;
 
-import java.util.List;
 import java.util.Set;
 
-import com.haixia.pojo.Department;
 import com.haixia.pojo.User;
 
 public interface IUserService {
