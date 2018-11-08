@@ -12,4 +12,5 @@ public interface IUserService {
 	public Set<String> getAdminHomeMenu(User user);
 	public void updateUser(User user);
 	public Set<User> getAll();
+	public User checkLogin(String sid);
 }

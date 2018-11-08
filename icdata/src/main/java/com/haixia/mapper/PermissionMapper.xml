@@ -19,6 +19,9 @@
       #{permissionUrl,jdbcType=VARCHAR}, #{permissionCode,jdbcType=VARCHAR}, #{parentId,jdbcType=INTEGER}, 
       #{parentString,jdbcType=VARCHAR}, #{permissionStatus,jdbcType=INTEGER})
   </insert>
+  <select id="getAll" resultMap="BaseResultMap">
+  	SELECT * FROM ic_permission
+  </select>
   <insert id="insertSelective" parameterType="com.haixia.pojo.Permission">
     insert into ic_permission
     <trim prefix="(" suffix=")" suffixOverrides=",">

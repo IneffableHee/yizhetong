@@ -40,6 +40,9 @@ public class LoginController {
 	@Autowired
 	private SessionDAO sessionDAO;
 	
+	@Resource
+	private UserUtil userUtil;
+	
 	@RequestMapping(value = "/loginTest", method = RequestMethod.POST)
     @ResponseBody
     public String CeShi(@RequestParam("pw") String pw, @RequestParam("name") String name) {
@@ -74,9 +77,7 @@ public class LoginController {
             	return json.toJSONString();
             }
             
-            UserUtil userT = new UserUtil(user);
-            logger.info("userT:"+userT);
-            if(!userT.hasRole("PartmentStaff")) {
+            if(!userUtil.hasRole(user,"PartmentStaff")) {
             	json.put("status", 3);
             	json.put("msg","账号不存在");
             	return json.toJSONString();
@@ -165,10 +166,8 @@ public class LoginController {
             	return json.toJSONString();
             }
             
-            logger.info("new UserUtil(user);");
-    		UserUtil userT = new UserUtil(user);
     		logger.info("userT.hasRole");
-            if(!userT.hasRole("Admin") && !userT.hasRole("GeneralAdmin")) {
+            if(!userUtil.hasRole(user,"Admin") && !userUtil.hasRole(user,"GeneralAdmin")) {
             	json.put("status", 3);
             	json.put("msg","账号不存在");
             	return json.toJSONString();
@@ -246,26 +245,21 @@ public class LoginController {
 			return json.toJSONString();
     	}
     	
-    	UserUtil userT = new UserUtil();
-		Collection<Session> sessions = sessionDAO.getActiveSessions();
-		String userName = userT.checkLoginUser(sid,sessions);
-		User user =userService.getByUserName(userName);
-		if(user == null)
-			user =userService.getByUserPhone(userName);
+    	User currentUser =this.userUtil.checkLoginUser(sid);
 
-		if(user==null) {
+		if(currentUser==null) {
 			json.put("status",6);
 			json.put("msg","尚未登录，请登录！");
 			return json.toJSONString();
 		}
     	
 		Tool tool = new Tool();
-		if(tool.pswCheckVerify(user,verify)==0) {
+		if(tool.pswCheckVerify(currentUser,verify)==0) {
     		json.put("status", 6);
     		json.put("msg", "验证码错误！");
     		return json.toJSONString();
     	}
-    	if(tool.pswCheckVerify(user,verify)==1) {
+    	if(tool.pswCheckVerify(currentUser,verify)==1) {
     		json.put("status", 6);
     		json.put("msg", "验证码超时，请重新获取！");
     		return json.toJSONString();

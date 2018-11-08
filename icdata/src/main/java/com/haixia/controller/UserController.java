@@ -40,19 +40,17 @@ public class UserController {
 	@Autowired
 	private SessionDAO sessionDAO;
 	
+	@Resource
+	private UserUtil userUtil;
+	
 	@ResponseBody
 	@RequestMapping("/getAll")
 	public String getAll(@RequestParam("sid") String sid) {
 		JSONObject json= new JSONObject();
 		
-		UserUtil userT = new UserUtil();
-		Collection<Session> sessions = sessionDAO.getActiveSessions();
-		String userName = userT.checkLoginUser(sid,sessions);
-		User user =userService.getByUserName(userName);
-		if(user == null)
-			user =userService.getByUserPhone(userName);
+		User currentUser =this.userUtil.checkLoginUser(sid);
 
-		if(user==null || !user.getUserState().equals("loginSuccess")) {
+		if(currentUser==null || !currentUser.getUserState().equals("loginSuccess")) {
 			json.put("status",4);
 			json.put("msg","尚未登录，请登录！");
 			return json.toJSONString();
@@ -72,14 +70,9 @@ public class UserController {
 	@RequestMapping("/get")public String get(@RequestParam("sid") String sid) {
 		JSONObject json= new JSONObject();
 		
-		UserUtil userT = new UserUtil();
-		Collection<Session> sessions = sessionDAO.getActiveSessions();
-		String userName = userT.checkLoginUser(sid,sessions);
-		User user =userService.getByUserName(userName);
-		if(user == null)
-			user =userService.getByUserPhone(userName);
+		User currentUser =this.userUtil.checkLoginUser(sid);
 
-		if(user==null || !user.getUserState().equals("loginSuccess")) {
+		if(currentUser==null || !currentUser.getUserState().equals("loginSuccess")) {
 			json.put("status",4);
 			json.put("msg","尚未登录，请登录！");
 			return json.toJSONString();
@@ -92,14 +85,9 @@ public class UserController {
 	@RequestMapping("/create")public String create(@RequestParam("sid") String sid) {
 		JSONObject json= new JSONObject();
 		
-		UserUtil userT = new UserUtil();
-		Collection<Session> sessions = sessionDAO.getActiveSessions();
-		String userName = userT.checkLoginUser(sid,sessions);
-		User user =userService.getByUserName(userName);
-		if(user == null)
-			user =userService.getByUserPhone(userName);
+		User currentUser =this.userUtil.checkLoginUser(sid);
 
-		if(user==null || !user.getUserState().equals("loginSuccess")) {
+		if(currentUser==null || !currentUser.getUserState().equals("loginSuccess")) {
 			json.put("status",4);
 			json.put("msg","尚未登录，请登录！");
 			return json.toJSONString();
@@ -112,14 +100,9 @@ public class UserController {
 	@RequestMapping("/update")public String update(@RequestParam("sid") String sid) {
 		JSONObject json= new JSONObject();
 		
-		UserUtil userT = new UserUtil();
-		Collection<Session> sessions = sessionDAO.getActiveSessions();
-		String userName = userT.checkLoginUser(sid,sessions);
-		User user =userService.getByUserName(userName);
-		if(user == null)
-			user =userService.getByUserPhone(userName);
+		User currentUser =this.userUtil.checkLoginUser(sid);
 
-		if(user==null || !user.getUserState().equals("loginSuccess")) {
+		if(currentUser==null || !currentUser.getUserState().equals("loginSuccess")) {
 			json.put("status",4);
 			json.put("msg","尚未登录，请登录！");
 			return json.toJSONString();
@@ -132,14 +115,9 @@ public class UserController {
 	@RequestMapping("/delete")public String delete(@RequestParam("sid") String sid) {
 		JSONObject json= new JSONObject();
 		
-		UserUtil userT = new UserUtil();
-		Collection<Session> sessions = sessionDAO.getActiveSessions();
-		String userName = userT.checkLoginUser(sid,sessions);
-		User user =userService.getByUserName(userName);
-		if(user == null)
-			user =userService.getByUserPhone(userName);
+		User currentUser =this.userUtil.checkLoginUser(sid);
 
-		if(user==null || !user.getUserState().equals("loginSuccess")) {
+		if(currentUser==null || !currentUser.getUserState().equals("loginSuccess")) {
 			json.put("status",4);
 			json.put("msg","尚未登录，请登录！");
 			return json.toJSONString();

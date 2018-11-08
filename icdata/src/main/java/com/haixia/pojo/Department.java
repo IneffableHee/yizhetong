@@ -5,6 +5,8 @@ public class Department {
 
     private String departmentName;
 
+    private String departmentShortName;
+
     private String departmentDescription;
 
     private Integer parentDepartmentId;
@@ -25,6 +27,14 @@ public class Department {
 
     public void setDepartmentName(String departmentName) {
         this.departmentName = departmentName == null ? null : departmentName.trim();
+    }
+
+    public String getDepartmentShortName() {
+        return departmentShortName;
+    }
+
+    public void setDepartmentShortName(String departmentShortName) {
+        this.departmentShortName = departmentShortName == null ? null : departmentShortName.trim();
     }
 
     public String getDepartmentDescription() {

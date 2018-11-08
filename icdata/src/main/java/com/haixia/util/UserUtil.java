@@ -21,20 +21,10 @@ public class UserUtil {
 	@Autowired
 	private SessionDAO sessionDAO;
 	
-	private User user;
-	
 	@Resource
 	private IUserService userService;
 	
-	public UserUtil(User u){
-		user = u;
-	}
-	
-	public UserUtil() {
-		
-	}
-	
-	public boolean hasRole(String ckRole) {
+	public boolean hasRole(User user,String ckRole) {
 		if(user.getRoles()!=null) {
 			logger.info(user.getRoles().size());
 			for (Role role : user.getRoles()) {
@@ -48,7 +38,7 @@ public class UserUtil {
 		return false;
 	}
 	
-	public boolean hasPermissiom(String ckPermission) {
+	public boolean hasPermissiom(User user,String ckPermission) {
 		for (Role role : user.getRoles()) {
 			logger.info("Role:");
 			for (Permission permission : role.getPermissions()) {
@@ -61,31 +51,9 @@ public class UserUtil {
 		return false;
 	}
 	
-	public String checkLoginUser(String sid,Collection<Session> sessions) {
-		logger.info("sid:"+sid);
-		String decodeText = Base64.decodeToString(sid);
-		logger.info("decodesid:"+decodeText);
-		String[] splitstr=decodeText.split("&");
-		String uid = Base64.decodeToString(splitstr[0]);
-		logger.info("uid:"+uid);
-		
-		String userName=null;
-		for(Session session:sessions){
-			System.out.println("登录ip:"+session.getHost());
-			System.out.println("登录id:"+session.getId());
-			System.out.println("登录用户"+session.getAttribute("currentUser"));
-			System.out.println("最后操作日期:"+session.getLastAccessTime());
-			if(uid.equals(session.getId().toString())) {
-				session.setTimeout(1800000);
-				userName = session.getAttribute("currentUser").toString();
-				logger.info("currentUser"+userName);
-				break;
-			}
-		}
-		return userName;
-	}
-	
-	public User checkLoginUser2(String sid) {
+	public User checkLoginUser(String sid) {
+		if(sid == "" || sid == null) 
+			return null;
 		Collection<Session> sessions = sessionDAO.getActiveSessions();
 		logger.info("sid:"+sid);
 		String decodeText = Base64.decodeToString(sid);
@@ -111,5 +79,13 @@ public class UserUtil {
 			}
 		}
 		return user;
+	}
+	
+	public boolean isAdmin(User user) {
+		if(user == null)
+			return false;
+		if(this.hasRole(user,"Admin") || this.hasRole(user,"GeneralAdmin")) 
+			return true;
+		return false;
 	}
 }
