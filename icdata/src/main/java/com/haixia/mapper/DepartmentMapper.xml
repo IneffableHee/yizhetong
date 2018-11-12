@@ -13,7 +13,7 @@
     department_id, department_name, department_short_name, department_description, parent_department_id, 
     create_time
   </sql>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+  <select id="getById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from ic_department
@@ -79,7 +79,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.haixia.pojo.Department">
+  <update id="updateById" parameterType="com.haixia.pojo.Department">
     update ic_department
     <set>
       <if test="departmentName != null">

@@ -34,9 +34,6 @@ public class DepartmentController {
 	@Resource
 	private IDepartmentService departmentService;
 	
-	@Autowired
-	private SessionDAO sessionDAO;
-	
 	@Resource
 	private IUserService userService;
 	
@@ -67,17 +64,24 @@ public class DepartmentController {
 	}
 	
 	@ResponseBody
-	@RequestMapping("/get")public String get(@RequestParam("sid") String sid) {
+	@RequestMapping("/get")public String get(@RequestParam("sid") String sid,@RequestParam("did") int did) {
 		JSONObject json= new JSONObject();
 		
 		User currentUser =this.userUtil.checkLoginUser(sid);
-
 		if(currentUser==null || !currentUser.getUserState().equals("loginSuccess")) {
 			json.put("status",4);
 			json.put("msg","尚未登录，请登录！");
 			return json.toJSONString();
 		}
 		
+		Department department = departmentService.getById(did);
+		if(department == null){
+			json.put("status",5);
+			json.put("msg","获取不到机构信息！");
+			return json.toJSONString();
+		}
+		
+		json.put("department",department);
 		return json.toJSONString();
 	}
 	
@@ -97,16 +101,31 @@ public class DepartmentController {
 	}
 	
 	@ResponseBody
-	@RequestMapping("/update")public String update(@RequestParam("sid") String sid) {
+	@RequestMapping("/update")public String update(@RequestParam("sid") String sid,@RequestParam("department") String strDepartment) {
 		JSONObject json= new JSONObject();
+		JSONObject jsonDepartment = JSONObject.parseObject(strDepartment); 
+		logger.info(sid+"---"+strDepartment);
 		
 		User currentUser =this.userUtil.checkLoginUser(sid);
-
 		if(currentUser==null || !currentUser.getUserState().equals("loginSuccess")) {
 			json.put("status",4);
 			json.put("msg","尚未登录，请登录！");
 			return json.toJSONString();
 		}
+		
+		if(!this.userUtil.isAdmin(currentUser)||!this.userUtil.hasPermissiom(currentUser, "department:update")) {
+         	json.put("status", 6);
+         	json.put("msg","没有操作权限");
+         	return json.toJSONString();
+         }
+		
+		Department department = new Department();
+		department.setDepartmentId(Integer.parseInt(jsonDepartment.getString("departmentId")));
+		department.setDepartmentName(jsonDepartment.getString("departmentName"));
+		department.setDepartmentShortName(jsonDepartment.getString("departmentShortName"));
+		department.setDepartmentDescription(jsonDepartment.getString("departmentDescription"));
+		
+		this.departmentService.updateDepartment(department);
 		
 		return json.toJSONString();
 	}

@@ -18,4 +18,12 @@ public class DepartmentServiceImpl implements IDepartmentService {
 	public Set<Department> getAll(){
 		return this.departmentrMapper.getAll();
 	}
+	
+	public Department getById(int did) {
+		return this.departmentrMapper.getById(did);
+	}
+	
+	public void updateDepartment(Department department) {
+		this.departmentrMapper.updateById(department);
+	}
 }

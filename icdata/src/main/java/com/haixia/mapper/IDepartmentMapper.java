@@ -11,11 +11,11 @@ public interface IDepartmentMapper {
 
     int insertSelective(Department record);
 
-    Department selectByPrimaryKey(Integer departmentId);
+    Department getById(Integer departmentId);
 
-    int updateByPrimaryKeySelective(Department record);
+    int updateById(Department record);
 
-    int updateByPrimaryKey(Department record);
+//    int updateByPrimaryKey(Department record);
     
     Set<Department> getAll();
 }
