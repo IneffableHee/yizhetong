@@ -11,13 +11,13 @@
   <sql id="Base_Column_List">
     role_id, role_name, create_time, discription, create_user
   </sql>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+  <select id="getById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from ic_role
     where role_id = #{roleId,jdbcType=INTEGER}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+  <delete id="deleteById" parameterType="java.lang.Integer">
     delete from ic_role
     where role_id = #{roleId,jdbcType=INTEGER}
   </delete>
@@ -64,7 +64,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.haixia.pojo.Role">
+  <update id="updateById" parameterType="com.haixia.pojo.Role">
     update ic_role
     <set>
       <if test="roleName != null">
@@ -82,6 +82,11 @@
     </set>
     where role_id = #{roleId,jdbcType=INTEGER}
   </update>
+  <select id="getAll" resultMap="BaseResultMap">
+	  select 
+	  <include refid="Base_Column_List" />
+	  from ic_role
+  </select>
   <update id="updateByPrimaryKey" parameterType="com.haixia.pojo.Role">
     update ic_role
     set role_name = #{roleName,jdbcType=VARCHAR},

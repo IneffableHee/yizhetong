@@ -26,4 +26,8 @@ public class DepartmentServiceImpl implements IDepartmentService {
 	public void updateDepartment(Department department) {
 		this.departmentrMapper.updateById(department);
 	}
+	
+	public void deleteById(int rid) {
+		this.departmentrMapper.deleteById(rid);
+	}
 }

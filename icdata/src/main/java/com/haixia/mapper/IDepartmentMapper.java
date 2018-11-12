@@ -5,7 +5,7 @@ import java.util.Set;
 import com.haixia.pojo.Department;
 
 public interface IDepartmentMapper {
-    int deleteByPrimaryKey(Integer departmentId);
+    int deleteById(Integer departmentId);
 
     int insert(Department record);
 

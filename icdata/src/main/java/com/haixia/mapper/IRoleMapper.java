@@ -1,17 +1,21 @@
 package com.haixia.mapper;
 
+import java.util.Set;
+
 import com.haixia.pojo.Role;
 
 public interface IRoleMapper {
-    int deleteByPrimaryKey(Integer roleId);
+    int deleteById(Integer roleId);
 
     int insert(Role record);
 
     int insertSelective(Role record);
 
-    Role selectByPrimaryKey(Integer roleId);
+    Role getById(Integer roleId);
 
-    int updateByPrimaryKeySelective(Role record);
+    int updateById(Role record);
 
-    int updateByPrimaryKey(Role record);
+//    int updateByPrimaryKey(Role record);
+
+    Set<Role> getAll();
 }
