@@ -13,6 +13,30 @@ public class Department {
 
     private String createTime;
 
+    private String departmentAddress;
+
+    private String departmentUser;
+
+    private String departmentPhone;
+
+    private Integer departmentState;
+
+    private Integer createUser;
+    
+    public Department(String departmentName,String departmentShortName,String departmentDescription,
+    		String departmentAddress,String departmentUser,String departmentPhone) {
+    	this.departmentName = departmentName;
+    	this.departmentShortName =departmentShortName;
+    	this.departmentDescription = departmentDescription;
+    	this.departmentAddress = departmentAddress;
+    	this.departmentUser = departmentUser;
+    	this.departmentPhone = departmentPhone;
+    }
+   
+    public Department() {
+    	
+    }
+
     public Integer getDepartmentId() {
         return departmentId;
     }
@@ -59,5 +83,45 @@ public class Department {
 
     public void setCreateTime(String createTime) {
         this.createTime = createTime == null ? null : createTime.trim();
+    }
+
+    public String getDepartmentAddress() {
+        return departmentAddress;
+    }
+
+    public void setDepartmentAddress(String departmentAddress) {
+        this.departmentAddress = departmentAddress == null ? null : departmentAddress.trim();
+    }
+
+    public String getDepartmentUser() {
+        return departmentUser;
+    }
+
+    public void setDepartmentUser(String departmentUser) {
+        this.departmentUser = departmentUser == null ? null : departmentUser.trim();
+    }
+
+    public String getDepartmentPhone() {
+        return departmentPhone;
+    }
+
+    public void setDepartmentPhone(String departmentPhone) {
+        this.departmentPhone = departmentPhone == null ? null : departmentPhone.trim();
+    }
+
+    public Integer getDepartmentState() {
+        return departmentState;
+    }
+
+    public void setDepartmentState(Integer departmentState) {
+        this.departmentState = departmentState == null ? null : departmentState;
+    }
+
+    public Integer getCreateUser() {
+        return createUser;
+    }
+
+    public void setCreateUser(Integer createUser) {
+        this.createUser = createUser;
     }
 }

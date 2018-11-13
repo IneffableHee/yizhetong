@@ -8,16 +8,28 @@
     <result column="department_description" jdbcType="VARCHAR" property="departmentDescription" />
     <result column="parent_department_id" jdbcType="INTEGER" property="parentDepartmentId" />
     <result column="create_time" jdbcType="VARCHAR" property="createTime" />
+    <result column="department_address" jdbcType="VARCHAR" property="departmentAddress" />
+    <result column="department_user" jdbcType="VARCHAR" property="departmentUser" />
+    <result column="department_phone" jdbcType="VARCHAR" property="departmentPhone" />
+    <result column="department_state" jdbcType="INTEGER" property="departmentState" />
+    <result column="create_user" jdbcType="INTEGER" property="createUser" />
   </resultMap>
   <sql id="Base_Column_List">
     department_id, department_name, department_short_name, department_description, parent_department_id, 
-    create_time
+    create_time, department_address, department_user, department_phone, department_state, 
+    create_user
   </sql>
   <select id="getById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from ic_department
     where department_id = #{departmentId,jdbcType=INTEGER}
+  </select>
+  <select id="getByName" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from ic_department
+    where department_name = #{departmentName,jdbcType=VARCHAR} or department_short_name = #{departmentName,jdbcType=VARCHAR}
   </select>
   <select id="getAll" resultMap="BaseResultMap">
 	  select 
@@ -28,15 +40,7 @@
     delete from ic_department
     where department_id = #{departmentId,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.haixia.pojo.Department">
-    insert into ic_department (department_id, department_name, department_short_name, 
-      department_description, parent_department_id, 
-      create_time)
-    values (#{departmentId,jdbcType=INTEGER}, #{departmentName,jdbcType=VARCHAR}, #{departmentShortName,jdbcType=VARCHAR}, 
-      #{departmentDescription,jdbcType=VARCHAR}, #{parentDepartmentId,jdbcType=INTEGER}, 
-      #{createTime,jdbcType=VARCHAR})
-  </insert>
-  <insert id="insertSelective" parameterType="com.haixia.pojo.Department">
+  <insert id="create" parameterType="com.haixia.pojo.Department">
     insert into ic_department
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="departmentId != null">
@@ -56,6 +60,21 @@
       </if>
       <if test="createTime != null">
         create_time,
+      </if>
+      <if test="departmentAddress != null">
+        department_address,
+      </if>
+      <if test="departmentUser != null">
+        department_user,
+      </if>
+      <if test="departmentPhone != null">
+        department_phone,
+      </if>
+      <if test="departmentState != null">
+        department_state,
+      </if>
+      <if test="createUser != null">
+        create_user,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -77,6 +96,21 @@
       <if test="createTime != null">
         #{createTime,jdbcType=VARCHAR},
       </if>
+      <if test="departmentAddress != null">
+        #{departmentAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="departmentUser != null">
+        #{departmentUser,jdbcType=VARCHAR},
+      </if>
+      <if test="departmentPhone != null">
+        #{departmentPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="departmentState != null">
+        #{departmentState,jdbcType=INTEGER},
+      </if>
+      <if test="createUser != null">
+        #{createUser,jdbcType=INTEGER},
+      </if>
     </trim>
   </insert>
   <update id="updateById" parameterType="com.haixia.pojo.Department">
@@ -97,16 +131,23 @@
       <if test="createTime != null">
         create_time = #{createTime,jdbcType=VARCHAR},
       </if>
+      <if test="departmentAddress != null">
+        department_address = #{departmentAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="departmentUser != null">
+        department_user = #{departmentUser,jdbcType=VARCHAR},
+      </if>
+      <if test="departmentPhone != null">
+        department_phone = #{departmentPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="departmentState != null">
+        department_state = #{departmentState,jdbcType=INTEGER},
+      </if>
+      <if test="createUser != null">
+        create_user = #{createUser,jdbcType=INTEGER},
+      </if>
     </set>
     where department_id = #{departmentId,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.haixia.pojo.Department">
-    update ic_department
-    set department_name = #{departmentName,jdbcType=VARCHAR},
-      department_short_name = #{departmentShortName,jdbcType=VARCHAR},
-      department_description = #{departmentDescription,jdbcType=VARCHAR},
-      parent_department_id = #{parentDepartmentId,jdbcType=INTEGER},
-      create_time = #{createTime,jdbcType=VARCHAR}
-    where department_id = #{departmentId,jdbcType=INTEGER}
-  </update>
+
 </mapper>

@@ -23,8 +23,16 @@ public class DepartmentServiceImpl implements IDepartmentService {
 		return this.departmentrMapper.getById(did);
 	}
 	
-	public void updateDepartment(Department department) {
+	public Department getByName(String dname) {
+		return this.departmentrMapper.getByName(dname);
+	}
+	
+	public void update(Department department) {
 		this.departmentrMapper.updateById(department);
+	}
+	
+	public void create(Department department) {
+		this.departmentrMapper.create(department);
 	}
 	
 	public void deleteById(int rid) {

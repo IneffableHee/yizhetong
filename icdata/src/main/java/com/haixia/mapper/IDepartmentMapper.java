@@ -7,15 +7,13 @@ import com.haixia.pojo.Department;
 public interface IDepartmentMapper {
     int deleteById(Integer departmentId);
 
-    int insert(Department record);
+	int create(Department record);
 
-    int insertSelective(Department record);
+	Department getById(Integer departmentId);
+	
+	Department getByName(String departmentName);
 
-    Department getById(Integer departmentId);
+    int updateById(Department department);
 
-    int updateById(Department record);
-
-//    int updateByPrimaryKey(Department record);
-    
     Set<Department> getAll();
 }
