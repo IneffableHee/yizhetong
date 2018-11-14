@@ -28,11 +28,24 @@ public class RoleServiceImpl implements IRoleService {
 		this.roleMapper.getById(rid);
 		return null;
 	}
+	
+	@Override
+	public Role getByName(String name) {
+		// TODO Auto-generated method stub
+		this.roleMapper.getByName(name);
+		return null;
+	}
 
 	@Override
-	public void updateRole(Role role) {
+	public void update(Role role) {
 		// TODO Auto-generated method stub
 		this.roleMapper.updateById(role);
+	}
+	
+	@Override
+	public void create(Role role) {
+		// TODO Auto-generated method stub
+		this.roleMapper.create(role);
 	}
 	
 	@Override

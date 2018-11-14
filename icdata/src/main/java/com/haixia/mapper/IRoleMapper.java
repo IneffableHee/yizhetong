@@ -7,15 +7,13 @@ import com.haixia.pojo.Role;
 public interface IRoleMapper {
     int deleteById(Integer roleId);
 
-    int insert(Role record);
-
-    int insertSelective(Role record);
+    int create(Role record);
 
     Role getById(Integer roleId);
+    
+    Role getByName(String roleName);
 
     int updateById(Role record);
-
-//    int updateByPrimaryKey(Role record);
 
     Set<Role> getAll();
 }

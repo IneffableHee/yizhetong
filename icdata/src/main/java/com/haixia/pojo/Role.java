@@ -13,6 +13,8 @@ public class Role {
     private String discription;
 
     private Integer createUser;
+    
+    private Integer roleStatus;
 
     private Set<Permission> permissionSet = new HashSet<>();
     
@@ -62,5 +64,13 @@ public class Role {
 
     public void setCreateUser(Integer createUser) {
         this.createUser = createUser;
+    }
+    
+    public Integer getRoleStatus() {
+        return roleStatus;
+    }
+
+    public void setRoleStatus(Integer roleStatus) {
+        this.roleStatus = roleStatus;
     }
 }

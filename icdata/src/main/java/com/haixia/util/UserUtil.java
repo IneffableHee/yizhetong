@@ -51,6 +51,25 @@ public class UserUtil {
 		return false;
 	}
 	
+	public boolean hasPermissiom(User user,String ckRole,String ckPermission) {
+		if(user.getRoles()!=null) {
+			logger.info(user.getRoles().size());
+			for (Role role : user.getRoles()) {
+				logger.info(role.getRoleName().toString());
+				if(ckRole.equals(role.getRoleName().toString())) {
+					logger.info("UserUtil hasRole:"+role.getRoleName().toString());
+					for (Permission permission : role.getPermissions()) {
+						if (ckPermission.equals(permission.getPermissionCode())) {
+							logger.info("---Permission:"+permission.getPermissionCode());
+							return true;
+						}
+					}
+				}
+			}
+		}
+		return false;
+	}
+	
 	public User checkLoginUser(String sid) {
 		if(sid == "" || sid == null) 
 			return null;

@@ -1,5 +1,6 @@
 package com.haixia.controller;
 
+import java.util.Date;
 import java.util.Set;
 
 import javax.annotation.Resource;
@@ -30,6 +31,7 @@ public class RoleController {
 	@ResponseBody
 	@RequestMapping("/getAll")
 	public String getAll(@RequestParam("sid") String sid) {
+		logger.info("role/getAll  begin");
 		JSONObject json= new JSONObject();
 		
 		User currentUser =this.userUtil.checkLoginUser(sid);
@@ -40,13 +42,19 @@ public class RoleController {
 			return json.toJSONString();
 		}
 		
+		if(!this.userUtil.isAdmin(currentUser)||!this.userUtil.hasPermissiom(currentUser, "role:qury")) {
+         	json.put("status", 6);
+         	json.put("msg","没有操作权限");
+         	return json.toJSONString();
+         }
+		
 		Set<Role> roles = this.roleService.getAll();
 		logger.info(roles.size());
 		for (Role role : roles) {  
 			logger.info(role.getRoleName());
 		}  
 		
-        json.put("role", JSONObject.toJSON(roles));
+        json.put("roles", JSONObject.toJSON(roles));
 		
 		return json.toJSONString();
 	}
@@ -63,7 +71,11 @@ public class RoleController {
 			json.put("msg","尚未登录，请登录！");
 			return json.toJSONString();
 		}
-		
+		if(!this.userUtil.isAdmin(currentUser)||!this.userUtil.hasPermissiom(currentUser, "role:get")) {
+         	json.put("status", 6);
+         	json.put("msg","没有操作权限");
+         	return json.toJSONString();
+         }
 		Role role = this.roleService.getById(rid);
 		if(role == null){
 			json.put("status",5);
@@ -80,6 +92,7 @@ public class RoleController {
 	public String create(@RequestParam("sid") String sid,@RequestParam("role") String strRole) {
 		JSONObject json= new JSONObject();
 		
+		JSONObject jsonRole = JSONObject.parseObject(strRole); 
 		User currentUser =this.userUtil.checkLoginUser(sid);
 
 		if(currentUser==null || !currentUser.getUserState().equals("loginSuccess")) {
@@ -87,6 +100,25 @@ public class RoleController {
 			json.put("msg","尚未登录，请登录！");
 			return json.toJSONString();
 		}
+		if(!this.userUtil.isAdmin(currentUser)||!this.userUtil.hasPermissiom(currentUser, "department:create")) {
+         	json.put("status", 6);
+         	json.put("msg","没有操作权限");
+         	return json.toJSONString();
+         }
+		if(this.roleService.getByName(jsonRole.getString("roleName"))!=null) {
+			json.put("status", 7);
+         	json.put("msg","角色已存在");
+         	return json.toJSONString();
+		}
+		
+		Role role = new Role();
+		role.setCreateUser(currentUser.getId());
+		role.setCreateTime(Long.toString(new Date().getTime()));
+		role.setDiscription(jsonRole.getString("roleDiscription"));
+		role.setRoleName(jsonRole.getString("roleName"));
+		role.setRoleStatus(1);
+		
+		this.roleService.create(role);
 		
 		return json.toJSONString();
 	}
@@ -135,12 +167,14 @@ public class RoleController {
          }
 		
 		Role role = new Role();
-//		role.ser(Integer.parseInt(jsonDepartment.getString("departmentId")));
-//		role.setDepartmentName(jsonDepartment.getString("departmentName"));
-//		role.setDepartmentShortName(jsonDepartment.getString("departmentShortName"));
-//		role.setDepartmentDescription(jsonDepartment.getString("departmentDescription"));
+		if(jsonRole.getString("roleDiscription")!=null)
+			role.setDiscription(jsonRole.getString("roleDiscription"));
+		if(jsonRole.getString("roleName")!=null)
+			role.setRoleName(jsonRole.getString("roleName"));
+		if(jsonRole.getString("roleStatus")!= null)
+			role.setRoleStatus(Integer.parseInt(jsonRole.getString("roleStatus")));
 		
-		this.roleService.updateRole(role);
+		this.roleService.update(role);
 		
 		return json.toJSONString();
 	}
