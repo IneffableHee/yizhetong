@@ -94,6 +94,7 @@ public class RoleController {
 		
 		JSONObject jsonRole = JSONObject.parseObject(strRole); 
 		User currentUser =this.userUtil.checkLoginUser(sid);
+		logger.info(strRole);
 
 		if(currentUser==null || !currentUser.getUserState().equals("loginSuccess")) {
 			json.put("status",4);
@@ -114,12 +115,13 @@ public class RoleController {
 		Role role = new Role();
 		role.setCreateUser(currentUser.getId());
 		role.setCreateTime(Long.toString(new Date().getTime()));
-		role.setDiscription(jsonRole.getString("roleDiscription"));
+		role.setDiscription(jsonRole.getString("discription"));
 		role.setRoleName(jsonRole.getString("roleName"));
 		role.setRoleStatus(1);
 		
 		this.roleService.create(role);
-		
+		json.put("status", 1);
+     	json.put("msg","创建成功");
 		return json.toJSONString();
 	}
 	
@@ -141,6 +143,12 @@ public class RoleController {
          	json.put("msg","没有操作权限");
          	return json.toJSONString();
          }
+		
+		if(this.roleService.getById(rid)==null) {
+			json.put("status", 7);
+         	json.put("msg","机构不存在！");
+         	return json.toJSONString();
+		}
 		
 		this.roleService.deleteById(rid);
 		

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.haixia.mapper.RoleMapper">
+<mapper namespace="com.haixia.mapper.IRoleMapper">
   <resultMap id="BaseResultMap" type="com.haixia.pojo.Role">
     <id column="role_id" jdbcType="INTEGER" property="roleId" />
     <result column="role_name" jdbcType="VARCHAR" property="roleName" />
@@ -19,6 +19,9 @@
 		<result column="permission_status" jdbcType="INTEGER" property="permissionStatus"/> 
 	</collection>  
   </resultMap>
+  <sql id="Base_Column_List_Lite">
+   		role_id, role_name, create_time, discription, create_user,role_status
+  </sql>
   <sql id="Base_Column_List">
   	SELECT
 	    r.role_id, r.role_name, r.create_time, r.discription, r.create_user,r.role_status,
@@ -34,11 +37,18 @@
   </sql>
   <select id="getById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     <include refid="Base_Column_List" />
-    AND role_id = #{roleId,jdbcType=INTEGER}
+    AND r.role_id = #{roleId,jdbcType=INTEGER}
   </select>
   <select id="getByName" parameterType="java.lang.String" resultMap="BaseResultMap">
-  	<include refid="Base_Column_List" />
-    AND role_name = #{roleName,jdbcType=VARCHAR}
+  	select 
+    <include refid="Base_Column_List_Lite" />
+    from ic_role
+    where role_name = #{roleName,jdbcType=VARCHAR}
+  </select>
+  <select id="getAll" resultMap="BaseResultMap">
+  	SELECT
+	<include refid="Base_Column_List_Lite" />
+	from ic_role
   </select>
   <delete id="deleteById" parameterType="java.lang.Integer">
     delete from ic_role
@@ -108,13 +118,5 @@
     </set>
     where role_id = #{roleId,jdbcType=INTEGER}
   </update>
-  <select id="getAll" resultMap="BaseResultMap">
-	  SELECT
-	    r.role_id, r.role_name, r.create_time, r.discription, r.create_user,r.role_status,
-	    p.permission_id,p.permission_name,p.permission_type,p.permission_url,p.permission_code,p.parent_string
- 	FROM
- 		ic_role as r,    
-    	ic_permission as p,    
-    	ic_role_permission as rp
-  </select>
+  
 </mapper>
