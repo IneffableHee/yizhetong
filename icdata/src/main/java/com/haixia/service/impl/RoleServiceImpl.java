@@ -23,6 +23,17 @@ public class RoleServiceImpl implements IRoleService {
 		// TODO Auto-generated method stub
 		return this.roleMapper.getAll();
 	}
+	
+	@Override
+	public Set<Role> getChild(Role role) {
+		// TODO Auto-generated method stub
+		String patrntString = role.getParentString();
+		String rid = role.getRoleId().toString();
+		if(patrntString == null)
+			return this.roleMapper.getChildren(rid+'%');
+		else
+			return this.roleMapper.getChildren(patrntString+'/'+rid+'%');
+	}
 
 	@Override
 	public Role getById(int rid) {

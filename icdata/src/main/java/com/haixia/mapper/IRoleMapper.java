@@ -16,4 +16,6 @@ public interface IRoleMapper {
     int updateById(Role record);
 
     Set<Role> getAll();
+    
+    Set<Role> getChildren(String parentString);
 }

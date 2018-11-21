@@ -1,7 +1,9 @@
 package com.haixia.controller;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
+import java.util.TreeSet;
 
 import javax.annotation.Resource;
 
@@ -101,7 +103,7 @@ public class RoleController {
 			json.put("msg","尚未登录，请登录！");
 			return json.toJSONString();
 		}
-		if(!this.userUtil.isAdmin(currentUser)||!this.userUtil.hasPermissiom(currentUser, "department:create")) {
+		if(!this.userUtil.isAdmin(currentUser)||!this.userUtil.hasPermissiom(currentUser, "role:create")) {
          	json.put("status", 6);
          	json.put("msg","没有操作权限");
          	return json.toJSONString();
@@ -185,6 +187,43 @@ public class RoleController {
 		this.roleService.update(role);
 		
 		return json.toJSONString();
+	}
+	
+	@ResponseBody
+	@RequestMapping("/getChildren")
+	public String getChild(@RequestParam("sid") String sid) {
+		JSONObject json= new JSONObject();
+		
+		User currentUser =this.userUtil.checkLoginUser(sid);
+
+		if(currentUser==null || !currentUser.getUserState().equals("loginSuccess")) {
+			json.put("status",4);
+			json.put("msg","尚未登录，请登录！");
+			return json.toJSONString();
+		}
+		
+		if(!this.userUtil.isAdmin(currentUser)) {
+         	json.put("status", 6);
+         	json.put("msg","没有操作权限");
+         	return json.toJSONString();
+         }
+		
+		Set<String> childrenStr = new TreeSet<String>();
+		Set<Role> currentRoles = currentUser.getRoles();
+		for (Role role : currentRoles) {  
+			Set<Role> childRoles = this.roleService.getChild(role);
+			childrenStr.add(role.getRoleName());
+			for(Role crole:childRoles) {
+				childrenStr.add(crole.getRoleName());
+				logger.info(crole.getRoleName());
+			}
+		}
+		
+		json.put("status",1);
+        json.put("children", JSONObject.toJSON(childrenStr));
+		
+		return json.toJSONString();
+	
 	}
 
 }

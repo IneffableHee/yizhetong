@@ -6,6 +6,7 @@ import com.haixia.pojo.Role;
 
 public interface IRoleService {
 	public Set<Role> getAll();
+	public Set<Role> getChild(Role role);
 	public Role getById(int rid);
 	public Role getByName(String name);
 	public void update(Role role);
