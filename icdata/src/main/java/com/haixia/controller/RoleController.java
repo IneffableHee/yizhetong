@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSONObject;
+import com.haixia.pojo.Permission;
 import com.haixia.pojo.Role;
 import com.haixia.pojo.User;
 import com.haixia.service.IRoleService;
@@ -224,6 +225,48 @@ public class RoleController {
 		
 		return json.toJSONString();
 	
+	}
+	
+	@ResponseBody
+	@RequestMapping("/getPermissions")
+	public String getPermissions(@RequestParam("sid") String sid,@RequestParam("rname") String rname) {
+		JSONObject json= new JSONObject();
+		
+		User currentUser =this.userUtil.checkLoginUser(sid);
+
+		if(currentUser==null || !currentUser.getUserState().equals("loginSuccess")) {
+			json.put("status",4);
+			json.put("msg","尚未登录，请登录！");
+			return json.toJSONString();
+		}
+		
+		if(!this.userUtil.isAdmin(currentUser)) {
+         	json.put("status", 6);
+         	json.put("msg","没有操作权限");
+         	return json.toJSONString();
+         }
+		logger.info("rname:"+rname);
+		Role role = roleService.getByName(rname);
+		logger.info(role.getRoleName());
+		
+		Set<String> permissionStr = new TreeSet<String>();
+		Set<String> menuStr = new TreeSet<String>();
+		for(Permission permission : role.getPermissions()) {
+			logger.info(permission);
+			logger.info(permission.getPermissionName()+","+permission.getPermissionCode()+","+permission.getPermissionType());
+			if(permission.getPermissionType().equals("permission")) {
+				permissionStr.add(permission.getPermissionName());
+			}
+			if(permission.getPermissionType().equals("menu")) {
+				menuStr.add(permission.getPermissionName());
+			}
+		}
+		
+		
+		json.put("status",1);
+		json.put("permissions", JSONObject.toJSON(permissionStr));
+		json.put("menus", JSONObject.toJSON(menuStr));
+		return json.toJSONString();
 	}
 
 }

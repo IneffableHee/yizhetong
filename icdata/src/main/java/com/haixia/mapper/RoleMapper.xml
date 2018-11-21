@@ -41,10 +41,8 @@
     AND r.role_id = #{roleId,jdbcType=INTEGER}
   </select>
   <select id="getByName" parameterType="java.lang.String" resultMap="BaseResultMap">
-  	select 
-    <include refid="Base_Column_List_Lite" />
-    from ic_role
-    where role_name = #{roleName,jdbcType=VARCHAR}
+    <include refid="Base_Column_List" />
+    AND r.role_name = #{roleName,jdbcType=VARCHAR}
   </select>
   <select id="getAll" resultMap="BaseResultMap">
   	SELECT
