@@ -9,7 +9,9 @@ import org.springframework.stereotype.Service;
 
 import com.haixia.controller.DepartmentController;
 import com.haixia.mapper.IRoleMapper;
+import com.haixia.mapper.IRolePermissionMapper;
 import com.haixia.pojo.Role;
+import com.haixia.pojo.RolePermission;
 import com.haixia.service.IRoleService;
 
 @Service("roleService")
@@ -17,6 +19,9 @@ public class RoleServiceImpl implements IRoleService {
 	
 	@Resource
 	private IRoleMapper roleMapper;
+	
+	@Resource
+	private IRolePermissionMapper rpMapper;
 
 	@Override
 	public Set<Role> getAll() {
@@ -63,5 +68,16 @@ public class RoleServiceImpl implements IRoleService {
 	public void deleteById(int rid) {
 		this.roleMapper.deleteById(rid);
 	}
+	
+	@Override
+	public void setPermission(Role role,int pid) {
+		int rid = role.getRoleId();
+		RolePermission addRPermission = new RolePermission();
+		addRPermission.setRoleId(rid);
+		addRPermission.setPermissionId(pid);
+		this.rpMapper.insertSelective(addRPermission);
+	}
+	
+	
 
 }

@@ -12,4 +12,6 @@ public interface IRoleService {
 	public void update(Role role);
 	public void deleteById(int rid);
 	public void create(Role role);
+	public void setMenu(Role role,int pid);
+	public void setPermission(Role role,int pid);
 }

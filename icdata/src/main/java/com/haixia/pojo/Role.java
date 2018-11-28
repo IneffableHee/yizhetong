@@ -16,6 +16,8 @@ public class Role {
     
     private Integer roleStatus;
     
+    private Integer parentId;
+    
     private String parentString;
 
     private Set<Permission> permissionSet = new HashSet<>();
@@ -82,5 +84,13 @@ public class Role {
 
     public void setParentString(String parentString) {
         this.parentString = parentString;
+    }
+    
+    public Integer getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(Integer parentId) {
+        this.parentId = parentId;
     }
 }

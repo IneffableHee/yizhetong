@@ -13,11 +13,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.haixia.pojo.Permission;
 import com.haixia.pojo.Role;
 import com.haixia.pojo.User;
 import com.haixia.service.IRoleService;
+import com.haixia.util.RoleUtil;
 import com.haixia.util.UserUtil;
 
 @Controller
@@ -27,6 +29,9 @@ public class RoleController {
 	
 	@Resource
 	private UserUtil userUtil;
+	
+	@Resource
+	private RoleUtil roleUtil;
 	
 	@Resource
 	private IRoleService roleService;
@@ -115,13 +120,37 @@ public class RoleController {
          	return json.toJSONString();
 		}
 		
+		Role prole = roleService.getByName(jsonRole.getString("parent"));
+		String pString = prole.getParentString();
 		Role role = new Role();
 		role.setCreateUser(currentUser.getId());
 		role.setCreateTime(Long.toString(new Date().getTime()));
 		role.setDiscription(jsonRole.getString("discription"));
 		role.setRoleName(jsonRole.getString("roleName"));
+		role.setParentId(prole.getRoleId());
+		if(pString == "")
+			role.setParentString(prole.getRoleId().toString());
+		else
+			role.setParentString(pString+'/'+prole.getRoleId().toString());
 		role.setRoleStatus(1);
+
+		logger.info("permission:"+jsonRole.getString("permissions"));
 		
+		String[] permissionArray=jsonRole.getString("permissions").split(",");
+		if(permissionArray!=null||permissionArray.length!=0){ 
+			for(int i=0;i<permissionArray.length;i++){ 
+				if(!this.roleUtil.hasPermissiom(prole, permissionArray[i])) {
+					json.put("status",8);
+					json.put("msg","未知错误，请联系管理员！");
+					return json.toJSONString();
+				}
+				
+				logger.info(permissionArray[i]);
+			} 
+		}
+		//到这里了
+		this.roleService.setMenus(role,menuArray);
+		this.roleService.setPermission(role,permissionArray);
 		this.roleService.create(role);
 		json.put("status", 1);
      	json.put("msg","创建成功");

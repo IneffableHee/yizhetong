@@ -8,6 +8,7 @@
     <result column="discription" jdbcType="VARCHAR" property="discription" />
     <result column="create_user" jdbcType="INTEGER" property="createUser" />
     <result column="role_status" jdbcType="INTEGER" property="roleStatus" />
+    <result column="parent_id" jdbcType="INTEGER" property="parentId" />
     <result column="parent_string" jdbcType="VARCHAR" property="parentString" />
     <collection property="permissionSet" column="permission_id" ofType="com.haixia.pojo.Permission">  
 		<id column="permission_id" jdbcType="INTEGER" property="permissionId" />  
@@ -21,11 +22,11 @@
 	</collection>  
   </resultMap>
   <sql id="Base_Column_List_Lite">
-   		role_id, role_name, create_time, discription, create_user,role_status,parent_string
+   		role_id, role_name, create_time, discription, create_user,role_status,parent_string,parent_id
   </sql>
   <sql id="Base_Column_List">
   	SELECT
-	    r.role_id, r.role_name, r.create_time, r.discription, r.create_user,r.role_status,r.parent_string,
+	    r.role_id, r.role_name, r.create_time, r.discription, r.create_user,r.role_status,r.parent_string,r.parent_id,
 	    p.permission_id,p.permission_name,p.permission_type,p.permission_url,p.permission_code,p.parent_string
  	FROM
  		ic_role as r,    
@@ -83,6 +84,9 @@
       <if test="parentString != null">
         parent_string,
       </if>
+      <if test="parentId != null">
+        parent_id,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="roleId != null">
@@ -105,6 +109,9 @@
       </if>
       <if test="parentString != null">
         #{parentString,jdbcType=VARCHAR},
+      </if>
+      <if test="parentId != null">
+        #{parentId,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>

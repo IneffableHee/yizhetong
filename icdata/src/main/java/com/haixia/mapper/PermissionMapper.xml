@@ -11,6 +11,22 @@
     <result column="parent_string" jdbcType="VARCHAR" property="parentString" />
     <result column="permission_status" jdbcType="INTEGER" property="permissionStatus" />
   </resultMap>
+  <sql id="Base_Column_List">
+    permission_id, permission_name, permission_type, permission_url, permission_code, 
+    parent_id, parent_string, permission_status
+  </sql>
+  <select id="getById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from ic_permission
+    where permission_id = #{permissionId,jdbcType=INTEGER}
+  </select>
+  <select id="getByName" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from ic_permission
+    where permission_name = #{permissionName,jdbcType=VARCHAR}
+  </select>
   <insert id="insert" parameterType="com.haixia.pojo.Permission">
     insert into ic_permission (permission_id, permission_name, permission_type, 
       permission_url, permission_code, parent_id, 
