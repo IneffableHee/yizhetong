@@ -8,6 +8,7 @@ import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 import com.haixia.controller.DepartmentController;
+import com.haixia.controller.UserController;
 import com.haixia.mapper.IRoleMapper;
 import com.haixia.mapper.IRolePermissionMapper;
 import com.haixia.pojo.Role;
@@ -16,6 +17,7 @@ import com.haixia.service.IRoleService;
 
 @Service("roleService")
 public class RoleServiceImpl implements IRoleService {
+	private static Logger logger = Logger.getLogger(RoleServiceImpl.class);
 	
 	@Resource
 	private IRoleMapper roleMapper;
@@ -53,6 +55,12 @@ public class RoleServiceImpl implements IRoleService {
 	}
 
 	@Override
+	public Role getByNameLite(String name) {
+		// TODO Auto-generated method stub
+		return this.roleMapper.getByNameLite(name);
+	}
+	
+	@Override
 	public void update(Role role) {
 		// TODO Auto-generated method stub
 		this.roleMapper.updateById(role);
@@ -70,14 +78,8 @@ public class RoleServiceImpl implements IRoleService {
 	}
 	
 	@Override
-	public void setPermission(Role role,int pid) {
-		int rid = role.getRoleId();
-		RolePermission addRPermission = new RolePermission();
-		addRPermission.setRoleId(rid);
-		addRPermission.setPermissionId(pid);
+	public void setPermission(RolePermission addRPermission) {
 		this.rpMapper.insertSelective(addRPermission);
 	}
-	
-	
 
 }

@@ -45,6 +45,12 @@
     <include refid="Base_Column_List" />
     AND r.role_name = #{roleName,jdbcType=VARCHAR}
   </select>
+  <select id="getByNameLite" parameterType="java.lang.String" resultMap="BaseResultMap">
+  	SELECT
+    <include refid="Base_Column_List_Lite" />
+    FROM ic_role
+    WHERE role_name = #{roleName,jdbcType=VARCHAR}
+  </select>
   <select id="getAll" resultMap="BaseResultMap">
   	SELECT
 	<include refid="Base_Column_List_Lite" />

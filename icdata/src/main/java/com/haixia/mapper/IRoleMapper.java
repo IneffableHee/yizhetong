@@ -12,6 +12,8 @@ public interface IRoleMapper {
     Role getById(Integer roleId);
     
     Role getByName(String roleName);
+    
+    Role getByNameLite(String roleName);
 
     int updateById(Role record);
 

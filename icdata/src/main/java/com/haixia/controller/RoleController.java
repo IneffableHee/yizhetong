@@ -17,7 +17,9 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.haixia.pojo.Permission;
 import com.haixia.pojo.Role;
+import com.haixia.pojo.RolePermission;
 import com.haixia.pojo.User;
+import com.haixia.service.IPermissionService;
 import com.haixia.service.IRoleService;
 import com.haixia.util.RoleUtil;
 import com.haixia.util.UserUtil;
@@ -35,6 +37,9 @@ public class RoleController {
 	
 	@Resource
 	private IRoleService roleService;
+	
+	@Resource
+	private IPermissionService permissionService;
 	
 	@ResponseBody
 	@RequestMapping("/getAll")
@@ -133,25 +138,39 @@ public class RoleController {
 		else
 			role.setParentString(pString+'/'+prole.getRoleId().toString());
 		role.setRoleStatus(1);
-
+		this.roleService.create(role);
 		logger.info("permission:"+jsonRole.getString("permissions"));
-		
+		//分配权限
 		String[] permissionArray=jsonRole.getString("permissions").split(",");
 		if(permissionArray!=null||permissionArray.length!=0){ 
 			for(int i=0;i<permissionArray.length;i++){ 
+				logger.info("1");
+				Permission permission = this.permissionService.getByName(permissionArray[i]);
+				logger.info("2");
+				if(permission==null)
+					continue;
+				logger.info("3");
 				if(!this.roleUtil.hasPermissiom(prole, permissionArray[i])) {
-					json.put("status",8);
-					json.put("msg","未知错误，请联系管理员！");
-					return json.toJSONString();
+					continue;
+//					json.put("status",8);
+//					json.put("msg","未知错误，请联系管理员！");
+//					return json.toJSONString();
 				}
-				
-				logger.info(permissionArray[i]);
+				logger.info("11");
+				RolePermission addRPermission = new RolePermission();
+				logger.info("22");
+				Role createRole = roleService.getByNameLite(jsonRole.getString("roleName"));
+				addRPermission.setRoleId(createRole.getRoleId());
+				logger.info("33");
+				addRPermission.setPermissionId(permission.getPermissionId());
+				logger.info("112233"+permissionArray[i]+","+permission.getPermissionId());
+				this.roleService.setPermission(addRPermission);
+				logger.info(permissionArray[i]+","+permission.getPermissionId());
 			} 
 		}
 		//到这里了
-		this.roleService.setMenus(role,menuArray);
-		this.roleService.setPermission(role,permissionArray);
-		this.roleService.create(role);
+		
+		
 		json.put("status", 1);
      	json.put("msg","创建成功");
 		return json.toJSONString();

@@ -16,11 +16,12 @@ public class RoleUtil {
 	public boolean hasPermissiom(Role role,String ckPermission) {
 		if(ckPermission == "" || ckPermission ==null)
 			return false;
+		
 		for (Permission permission : role.getPermissions()) {
-				if (ckPermission.equals(permission.getPermissionName())) {
-					logger.info("---Permission:"+permission.getPermissionCode());
-					return true;
-				}
+			if (ckPermission.equals(permission.getPermissionName())) {
+				logger.info("---Permission:"+ckPermission+","+permission.getPermissionName());
+				return true;
+			}
 		}
 		return false;
 	}
