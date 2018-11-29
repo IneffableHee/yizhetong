@@ -16,6 +16,7 @@
 	
 	<bean id="myRealm" class="com.haixia.shiro.MyRealm"></bean>
 	<bean id="userUtil" class="com.haixia.util.UserUtil"></bean>
+	<bean id="roleUtil" class="com.haixia.util.RoleUtil"></bean>
 	<bean id="sessionDAO" class="org.apache.shiro.session.mgt.eis.MemorySessionDAO"/>
 	
 	<!-- 引入配置文件 -->
